@@ -1,6 +1,11 @@
 package model;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,12 +45,13 @@ public class BankAccounts {
 
     //EFFECTS: Print out the names and balances of the accounts
     public void accountOverview() {
-        System.out.println("Hello, " + userName + "!");
-        System.out.println("Here is your accounts:");
+        System.out.println("Hello, " + userName + "! Here is your accounts:");
+        System.out.println("-------------");
         int i = 0;
-        for (Account next: accounts) {
+        for (Account next : accounts) {
             System.out.println("Account Number [" + ++i + "]");
             next.displayAccount();
+            System.out.println("-------------");
         }
     }
 
@@ -58,17 +64,22 @@ public class BankAccounts {
     }
 
     //EFFECTS: show the options to user, quit if chosen, otherwise deal with options
-    public void bankAccountsOperation() {
+    public void bankAccountsOperation() throws IOException {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             accountOverview();
             System.out.println("What do you want to do with your accounts?");
-            System.out.println("[1] Open a debit account [2] Remove an account [3] Change a debit account [4] Quit");
-            // Need add more functions about credit accounts
+            System.out.println(
+                    "[1] Open an account [2] Remove an account [3] Operate an account [S] Save [Q] Quit");
             String option = scanner.nextLine();
-            if (option.equals("4")) {
+            if (option.equals("Q")) {
                 System.out.println("Thank you!");
                 break;
+            }
+
+            if (option.equals("S")) {
+                saveAccounts();
+                continue;
             }
 
             chooseOptions(option);
@@ -79,7 +90,7 @@ public class BankAccounts {
     private void chooseOptions(String option) {
         switch (option) {
             case "1": {
-                openDebitAccount();
+                openAccount();
                 break;
             }
             case "2": {
@@ -88,7 +99,7 @@ public class BankAccounts {
             }
 
             case "3": {
-                changeDebitAccount();
+                changeAccount();
                 break;
             }
             default:
@@ -98,8 +109,8 @@ public class BankAccounts {
 
     //MODIFIES: this.accounts
     //EFFECTS: make changes to an account
-    private void changeDebitAccount() {
-        accounts.get(findAccountIndex()).debitAccountOperation();
+    private void changeAccount() {
+        accounts.get(findAccountIndex()).accountOperation();
     }
 
     //MODIFIES: this.accounts
@@ -111,9 +122,24 @@ public class BankAccounts {
 
     //MODIFIES: this.accounts
     //EFFECTS: add a new unnamed debit account to the accounts
-    public void openDebitAccount() {
-        Account account = new Account();
-        addAccount(account);
+    public void openAccount() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Which type of account do you want to open?");
+        System.out.println("[1] Debit [2] Credit");
+        String option = scanner.nextLine();
+
+        switch (option) {
+            case "1": {
+                addAccount(new DebitAccount());
+                break;
+            }
+            case "2": {
+                addAccount(new CreditAccount());
+                break;
+            }
+            default:
+                System.out.println("Invalid");
+        }
     }
 
 
@@ -123,4 +149,37 @@ public class BankAccounts {
         Scanner scanner = new Scanner(System.in);
         return Integer.parseInt(scanner.nextLine()) - 1;
     }
+
+    public void loadAccounts() throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
+        for (String line : lines) {
+            ArrayList<String> partsOfLine = splitOnSpace(line);
+            String type = partsOfLine.get(0);
+            if (type.equals("Credit")) {
+                addAccount(new CreditAccount(
+                        partsOfLine.get(1), Double.parseDouble(partsOfLine.get(2))));
+            } else if (type.equals("Debit")) {
+                addAccount(new DebitAccount(
+                        partsOfLine.get(1), Double.parseDouble(partsOfLine.get(2)),
+                        Double.parseDouble(partsOfLine.get(3))));
+            }
+        }
+    }
+
+    public static ArrayList<String> splitOnSpace(String line) {
+        String[] splits = line.split(" ");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
+
+    public void saveAccounts() throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
+        PrintWriter writer = new PrintWriter("./data/BankAccounts.txt", "UTF-8");
+
+        for (Account next : accounts) {
+            writer.println(next.saveAccountLine());
+        }
+
+        writer.close();
+    }
+
 }

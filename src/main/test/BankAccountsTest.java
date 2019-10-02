@@ -1,17 +1,15 @@
 package test;
 
-import model.Account;
+import model.DebitAccount;
 import model.BankAccounts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.image.PackedColorModel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestBankAccounts {
+public class BankAccountsTest {
 
     private BankAccounts bankAccounts;
 
@@ -30,8 +28,8 @@ public class TestBankAccounts {
     @Test
     public void addAndRemoveAccount() {
         assertEquals(bankAccounts.numberOfAccounts(), 0);
-        Account a1 = new Account();
-        Account a2 = new Account();
+        DebitAccount a1 = new DebitAccount();
+        DebitAccount a2 = new DebitAccount();
 
         bankAccounts.addAccount(a1);
         assertEquals(bankAccounts.numberOfAccounts(), 1);
@@ -48,7 +46,7 @@ public class TestBankAccounts {
 
     public void testOpenDebitAccount() {
         assertEquals(bankAccounts.numberOfAccounts(), 0);
-        bankAccounts.openDebitAccount();
+        bankAccounts.openAccount();
         assertEquals(bankAccounts.numberOfAccounts(), 1);
     }
 }
