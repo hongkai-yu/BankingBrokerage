@@ -3,7 +3,6 @@ package ui;
 import model.Account;
 import model.BankAccounts;
 
-import java.awt.image.PackedColorModel;
 import java.io.IOException;
 import java.util.Scanner;
 

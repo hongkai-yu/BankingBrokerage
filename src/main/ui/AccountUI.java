@@ -1,9 +1,6 @@
 package ui;
 
 import model.Account;
-import model.Account.*;
-import sun.lwawt.macosx.CPrinterDevice;
-import sun.lwawt.macosx.CPrinterDialog;
 
 import java.util.Scanner;
 

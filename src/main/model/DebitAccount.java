@@ -1,10 +1,5 @@
 package model;
 
-import ui.AccountUI;
-import ui.AccountUI.*;
-
-import java.util.*;
-
 public class DebitAccount extends Account implements UsingInterestRate {
 
     public static final String ACCOUNT_TYPE = "Debit";
