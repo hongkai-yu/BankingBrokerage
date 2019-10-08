@@ -25,7 +25,7 @@ public class WeirdFinancialProduct implements UsingInterestRate {
     }
 
     @Override
-    public double getBalance() {
+    public double getValue() {
         return amount;
     }
 }

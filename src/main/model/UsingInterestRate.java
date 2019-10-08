@@ -10,5 +10,5 @@ public interface UsingInterestRate {
     //EFFECT: update the financial product / account
     public void updateNextPeriod();
 
-    public double getBalance();
+    public double getValue();
 }

@@ -27,16 +27,16 @@ public class DebitAccountTest {
 
     @Test
     public void testAddBalance() {
-        assertEquals(debitAccount.getBalance(),0);
+        assertEquals(debitAccount.getValue(),0);
         debitAccount.addBalance(50);
-        assertEquals(debitAccount.getBalance(),50);
+        assertEquals(debitAccount.getValue(),50);
     }
 
     @Test
     public void testSubBalance() {
-        assertEquals(debitAccount.getBalance(),0);
+        assertEquals(debitAccount.getValue(),0);
         debitAccount.subBalance(50);
-        assertEquals(debitAccount.getBalance(),-50);
+        assertEquals(debitAccount.getValue(),-50);
     }
 
     @Test
@@ -47,8 +47,8 @@ public class DebitAccountTest {
         debitAccount.addBalance(50);
         debitAccount.transferMoney(payee,30.0);
 
-        assertEquals(debitAccount.getBalance(),20);
-        assertEquals(payee.getBalance(),30);
+        assertEquals(debitAccount.getValue(),20);
+        assertEquals(payee.getValue(),30);
 
     }
 }

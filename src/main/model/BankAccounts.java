@@ -9,9 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class BankAccounts {
-    public String userName;
-    public List<Account> accounts;
+    private String userName;
+    private List<Account> accounts;
+//    public static final String FILE_PATH = "./data/BankAccounts.txt";
 
     // EFFECTS: initially there is no account
     public BankAccounts() {
@@ -21,6 +23,10 @@ public class BankAccounts {
 
     public String getUserName() {
         return userName;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
     //EFFECTS: set the username of the bank account
@@ -33,101 +39,27 @@ public class BankAccounts {
         accounts.add(account);
     }
 
-    //EFFECTS: remove an account to the bank accounts
+    //EFFECTS: remove an account to the bank accounts, based on the acount
     public void removeAccount(Account account) {
         accounts.remove(account);
     }
+
+    // Overload
+    //EFFECTS: remove an account to the bank accounts, based on index
+    public void removeAccount(int index) {
+        accounts.remove(accounts.get(index));
+    }
+
 
     //EFFECTS: Return the number of accounts in the list
     public int numberOfAccounts() {
         return accounts.size();
     }
 
-    //EFFECTS: Print out the names and balances of the accounts
-    public void accountOverview() {
-        System.out.println("Hello, " + userName + "! Here is your accounts:");
-        System.out.println("-------------");
-        int i = 0;
-        for (Account next : accounts) {
-            System.out.println("Account Number [" + ++i + "]");
-            next.displayAccount();
-            System.out.println("-------------");
-        }
-    }
-
-    //EFFECTS: change the username of the accounts
-    public void changeUserName() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your username:");
-        String name = scanner.nextLine();
-        setUserName(name);
-    }
-
-    //EFFECTS: show the options to user, quit if chosen, otherwise deal with options
-    public void bankAccountsOperation() throws IOException {
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            accountOverview();
-            System.out.println("What do you want to do with your accounts?");
-            System.out.println(
-                    "[1] Open an account [2] Remove an account [3] Operate an account [S] Save [Q] Quit");
-            String option = scanner.nextLine();
-            if (option.equals("Q")) {
-                System.out.println("Thank you!");
-                break;
-            }
-
-            if (option.equals("S")) {
-                saveAccounts();
-                continue;
-            }
-
-            chooseOptions(option);
-        }
-    }
-
-    //EFFECTS: deal with options
-    private void chooseOptions(String option) {
-        switch (option) {
-            case "1": {
-                openAccount();
-                break;
-            }
-            case "2": {
-                removeAnAccount();
-                break;
-            }
-
-            case "3": {
-                changeAccount();
-                break;
-            }
-            default:
-                System.out.println("Invalid Option");
-        }
-    }
-
-    //MODIFIES: this.accounts
-    //EFFECTS: make changes to an account
-    private void changeAccount() {
-        accounts.get(findAccountIndex()).accountOperation();
-    }
-
-    //MODIFIES: this.accounts
-    //EFFECTS: remove an given account
-    private void removeAnAccount() {
-        removeAccount(accounts.get(findAccountIndex()));
-    }
-
 
     //MODIFIES: this.accounts
     //EFFECTS: add a new unnamed debit account to the accounts
-    public void openAccount() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Which type of account do you want to open?");
-        System.out.println("[1] Debit [2] Credit");
-        String option = scanner.nextLine();
-
+    public void openAccountOptions(String option) {
         switch (option) {
             case "1": {
                 addAccount(new DebitAccount());
@@ -143,15 +75,9 @@ public class BankAccounts {
     }
 
 
-    //EFFECTS: transfer the index given by user to the index in the internal system
-    private int findAccountIndex() {
-        System.out.println("Which account?");
-        Scanner scanner = new Scanner(System.in);
-        return Integer.parseInt(scanner.nextLine()) - 1;
-    }
-
-    public void loadAccounts() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
+    public void loadAccounts(String path) throws IOException {
+//        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(path));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
             String type = partsOfLine.get(0);
@@ -166,14 +92,8 @@ public class BankAccounts {
         }
     }
 
-    public static ArrayList<String> splitOnSpace(String line) {
-        String[] splits = line.split(" ");
-        return new ArrayList<>(Arrays.asList(splits));
-    }
-
-    public void saveAccounts() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
-        PrintWriter writer = new PrintWriter("./data/BankAccounts.txt", "UTF-8");
+    public void saveAccounts(String path) throws IOException {
+        PrintWriter writer = new PrintWriter(path, "UTF-8");
 
         for (Account next : accounts) {
             writer.println(next.saveAccountLine());
@@ -182,4 +102,8 @@ public class BankAccounts {
         writer.close();
     }
 
+    public static ArrayList<String> splitOnSpace(String line) {
+        String[] splits = line.split(" ");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
 }

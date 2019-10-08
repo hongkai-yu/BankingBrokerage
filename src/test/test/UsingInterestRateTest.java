@@ -29,20 +29,20 @@ public class UsingInterestRateTest {
     @Test
     public void testUpdateNextPeriod() {
         d0.updateNextPeriod();
-        assertEquals(d0.getBalance(),0);
+        assertEquals(d0.getValue(),0);
 
         d1.updateNextPeriod();
-        assertEquals(d1.getBalance(),200 * 1.05);
+        assertEquals(d1.getValue(),200 * 1.05);
         d1.updateNextPeriod();
-        assertEquals(d1.getBalance(),200 * 1.05 * 1.05);
+        assertEquals(d1.getValue(),200 * 1.05 * 1.05);
 
         w0.updateNextPeriod();
-        assertEquals(w0.getBalance(),0);
+        assertEquals(w0.getValue(),0);
 
         w1.updateNextPeriod();
-        assertEquals(w1.getBalance(),50 * 1.05);
+        assertEquals(w1.getValue(),50 * 1.05);
         w1.updateNextPeriod();
-        assertEquals(w1.getBalance(),(50 * 1.05) / 2 * 1.05);
+        assertEquals(w1.getValue(),(50 * 1.05) / 2 * 1.05);
     }
 
 }

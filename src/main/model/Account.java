@@ -1,39 +1,56 @@
 package model;
 
-import java.io.IOException;
+public abstract class Account {
 
-public interface Account {
+
+    protected static String ACCOUNT_TYPE;
+    protected double balance;
+    protected String name;
+
+    public Account() {
+        balance = 0;
+        name = "Unnamed";
+    }
+
+    // Overload
+    public Account(String n, double b) {
+        balance = b;
+        name = n;
+    }
 
     //MODIFIES: this
     //EFFECTS: change the name of this.name
-    void setName(String name);
+    public void setName(String name) {
+        this.name = name;
+    }
 
     //MODIFIES: this
     //EFFECTS: add balance to the account
-    void addBalance(double add);
+    public void addBalance(double add) {
+        this.balance += add;
+    }
 
     //MODIFIES: this
     //EFFECTS: subtract balance from the account
-    void subBalance(double sub);
+    public void subBalance(double sub) {
+        this.balance -= sub;
+    }
 
-    String getName();
+    public String getName() {
+        return this.name;
+    }
 
-    double getBalance();
-
-    //EFFECTS: get an overview of the account
-    void displayAccount();
-
-    //MODIFIES: this
-    //EFFECTS: change the name of the account
-    void changeName();
-
-    //EFFECTS: show the options, quit if chosen, otherwise deal with options
-    void accountOperation();
-
-    //EFFECTS: deal with options
-    void chooseOptions(String option);
+    public double getBalance() {
+        return this.balance;
+    }
 
     //EFFECT: output the account information to a file
-    String saveAccountLine() throws IOException;
+    public abstract String saveAccountLine();
+
+    //EFFECTS: get an overview of the account
+    public abstract String accountInformation();
+
+    public abstract String optionsOfAccount();
+
 
 }
