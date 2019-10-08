@@ -38,7 +38,7 @@ public class BankAccounts {
         accounts.add(account);
     }
 
-    //EFFECTS: remove an account to the bank accounts, based on the acount
+    //EFFECTS: remove an account to the bank accounts, based on the account
     public void removeAccount(Account account) {
         accounts.remove(account);
     }
@@ -101,7 +101,7 @@ public class BankAccounts {
         writer.close();
     }
 
-    public static ArrayList<String> splitOnSpace(String line) {
+    private static ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }

@@ -33,7 +33,7 @@ public class BankAccountsTest {
     }
 
     @Test
-    public void addAndRemoveAccount() {
+    public void testAddAndRemoveAccount() {
         assertEquals(bankAccounts.numberOfAccounts(), 0);
         DebitAccount a1 = new DebitAccount();
         DebitAccount a2 = new DebitAccount();
@@ -49,6 +49,20 @@ public class BankAccountsTest {
         bankAccounts.removeAccount(a1);
         assertEquals(bankAccounts.numberOfAccounts(), 1);
         assertTrue(bankAccounts.getAccounts().contains(a2));
+
+        bankAccounts.removeAccount(0);
+        assertEquals(bankAccounts.numberOfAccounts(), 0);
+        assertFalse(bankAccounts.getAccounts().contains(a2));
+
+    }
+
+    @Test
+    public void testOpenAccountOptions() {
+        bankAccounts.openAccountOptions("1");
+        assertEquals(bankAccounts.numberOfAccounts(),1);
+
+        bankAccounts.openAccountOptions("2");
+        assertEquals(bankAccounts.numberOfAccounts(),2);
     }
 
     @Test
@@ -60,7 +74,7 @@ public class BankAccountsTest {
         loadedBankAccounts1.loadAccounts(TEST_FILE_PATH);
         assertEquals(loadedBankAccounts1.getUserName(), bankAccounts.getUserName());
         assertEquals(loadedBankAccounts1.getAccounts().size(),bankAccounts.getAccounts().size());
-//
+
 //        int size = loadedBankAccounts1.accounts.size();
 //        for (int i = 0; i <= size; i++) {
 //            assertTrue(loadedBankAccounts1.accounts.get(i).equals(bankAccounts.accounts.get(i)));

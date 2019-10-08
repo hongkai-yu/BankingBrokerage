@@ -6,8 +6,8 @@ public class CreditAccount extends Account {
     public static final String ACCOUNT_TYPE = "Credit";
 
 
-    public static final List<String> options = Collections.unmodifiableList(Arrays.asList(
-            "Make Purchase"));
+//    public static final List<String> options = Collections.unmodifiableList(Arrays.asList(
+//            "Make Purchase"));
 
     //EFFECT: create a new CreditAccount
     public CreditAccount() {
@@ -24,7 +24,7 @@ public class CreditAccount extends Account {
     public String accountInformation() {
         return "Account Type: " + ACCOUNT_TYPE + "\n"
                 + "Account Name: " + getName() + "\n"
-                + "Balance:" + getBalance() + "\n";
+                + "Balance: " + getBalance() + "\n";
     }
 
     @Override

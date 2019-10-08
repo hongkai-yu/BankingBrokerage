@@ -1,42 +1,18 @@
 package test;
 
+import model.DebitAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import model.DebitAccount;
 
 public class DebitAccountTest {
 
     public DebitAccount debitAccount;
 
     @BeforeEach
-    private void runBefore() {
+    public void runBefore() {
         debitAccount = new DebitAccount();
-    }
-
-    @Test
-    public void testSetName() {
-        assertEquals(debitAccount.getName(),"Unnamed");
-        debitAccount.setName("RealName");
-        assertEquals(debitAccount.getName(),"RealName");
-    }
-
-    @Test
-    public void testAddBalance() {
-        assertEquals(debitAccount.getValue(),0);
-        debitAccount.addBalance(50);
-        assertEquals(debitAccount.getValue(),50);
-    }
-
-    @Test
-    public void testSubBalance() {
-        assertEquals(debitAccount.getValue(),0);
-        debitAccount.subBalance(50);
-        assertEquals(debitAccount.getValue(),-50);
     }
 
     @Test

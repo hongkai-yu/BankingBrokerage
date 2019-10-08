@@ -13,7 +13,7 @@ public abstract class AccountUI {
     }
 
     public static void displayAccount(Account account) {
-        System.out.printf(account.accountInformation());
+        System.out.print(account.accountInformation());
     }
 
     //MODIFIES: this
@@ -31,7 +31,7 @@ public abstract class AccountUI {
             Scanner scanner = new Scanner(System.in);
             displayAccount(account);
             System.out.println("What do you want to do with your account?");
-            System.out.printf(account.optionsOfAccount());
+            System.out.print(account.optionsOfAccount());
             System.out.println(" [Q] Quit");
             String option = scanner.nextLine();
 

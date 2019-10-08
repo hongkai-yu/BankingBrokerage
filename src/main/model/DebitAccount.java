@@ -25,7 +25,7 @@ public class DebitAccount extends Account implements UsingInterestRate {
     public String accountInformation() {
         return "Account Type: " + ACCOUNT_TYPE + "\n"
                 + "Account Name: " + getName() + "\n"
-                + "Balance:" + getBalance() + "\n";
+                + "Balance: " + getBalance() + "\n";
     }
 
 
