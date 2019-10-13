@@ -41,6 +41,20 @@ public class DebitAccount extends Account implements UsingInterestRate {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: withdraw money from the debit account
+    public void withdrawDeposit(Double amount) throws NegativeAmountException, InsufficientFundException {
+        if (amount > getBalance()) {
+            throw new InsufficientFundException();
+        }
+
+        if (amount < 0) {
+            throw new NegativeAmountException();
+        }
+
+        subBalance(amount);
+    }
+
     @Override
     public String optionsOfAccount() {
         return "[1] Change name [2] Deposit [3] Withdraw";

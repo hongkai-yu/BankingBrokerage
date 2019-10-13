@@ -1,8 +1,5 @@
-package test;
+package model;
 
-import model.Account;
-import model.CreditAccount;
-import model.DebitAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

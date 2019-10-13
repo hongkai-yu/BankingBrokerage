@@ -1,32 +1,44 @@
 package ui;
 
-import model.Account;
+import model.*;
 
 import java.util.Scanner;
 
 public class DebitAccountUI extends AccountUI {
+
     public DebitAccountUI(Account account) {
         super(account);
     }
 
     //MODIFIES: this
     //EFFECTS: withdraw deposit from the account
-    private void withdrawDeposit(Account account) {
+    private void withdrawDepositUI() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the amount of money you want to withdraw:");
         double withdraw = Double.parseDouble(scanner.nextLine());
-        if (withdraw > account.getBalance()) {
-            System.out.println("Not enough money!");
-        } else {
-            account.subBalance(withdraw);
-            System.out.println("Withdraw succeeded");
+
+        DebitAccount debitAccount = (DebitAccount) account;
+
+        try {
+            debitAccount.withdrawDeposit(withdraw);
+        } catch (CannotWithdraw e) {
+            System.out.println(e.response());
+        } finally {
+            System.out.println("Tried Withdraw");
         }
+
+//        if (withdraw > account.getBalance()) {
+//            System.out.println("Not enough money!");
+//        } else {
+//            account.subBalance(withdraw);
+//            System.out.println("Withdraw succeeded");
+//        }
     }
 
     //REQUIRES: the amount of money > 0
     //MODIFIES: this
     //EFFECTS: make deposit from the account
-    private void makeDeposit(Account account) {
+    private void makeDeposit() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the amount of money you want to deposit:");
         double deposit = Double.parseDouble(scanner.nextLine());
@@ -42,18 +54,15 @@ public class DebitAccountUI extends AccountUI {
                 break;
             }
             case "2": {
-                makeDeposit(account);
+                makeDeposit();
                 break;
             }
-
             case "3": {
-                withdrawDeposit(account);
+                withdrawDepositUI();
                 break;
             }
             default:
                 System.out.println("Invalid Option");
         }
     }
-
-
 }

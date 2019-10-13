@@ -25,6 +25,12 @@ public abstract class Account {
     }
 
     //MODIFIES: this
+    //EFFECTS: change the name of this.balance
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    //MODIFIES: this
     //EFFECTS: add balance to the account
     public void addBalance(double add) {
         this.balance += add;

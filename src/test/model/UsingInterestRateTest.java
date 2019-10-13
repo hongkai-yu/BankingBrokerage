@@ -1,8 +1,5 @@
-package test;
+package model;
 
-import model.DebitAccount;
-import model.UsingInterestRate;
-import model.WeirdFinancialProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

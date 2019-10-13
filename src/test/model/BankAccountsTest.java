@@ -1,12 +1,7 @@
-package test;
+package model;
 
-import model.Account;
-import model.CreditAccount;
-import model.DebitAccount;
-import model.BankAccounts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ui.BankDemo;
 
 import java.io.IOException;
 
@@ -81,6 +76,8 @@ public class BankAccountsTest {
 //        }
 
     }
+
+
 }
 
 

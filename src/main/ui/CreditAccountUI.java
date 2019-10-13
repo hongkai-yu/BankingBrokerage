@@ -14,7 +14,7 @@ public class CreditAccountUI extends AccountUI {
 
     //MODIFIES: this
     //EFFECT: make a purchase, credit will increase
-    public void makePurchase(Account account) {
+    public void makePurchase() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the total price of the bill:");
         double bill = Double.parseDouble(scanner.nextLine());
@@ -26,7 +26,7 @@ public class CreditAccountUI extends AccountUI {
     public void chooseOptions(String option) {
         switch (option) {
             case "1": {
-                makePurchase(account);
+                makePurchase();
                 break;
             }
             default:

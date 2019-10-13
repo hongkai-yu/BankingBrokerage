@@ -2,6 +2,7 @@ package ui;
 
 import model.Account;
 import model.BankAccounts;
+import model.DebitAccount;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -80,12 +81,24 @@ public class BankAccountsUI {
             }
             case "3": {
                 Account account = bankAccounts.getAccounts().get(findAccountIndex());
-//                accountOperation(account);
+                operateAccount(account);
                 break;
             }
             default:
                 System.out.println("Invalid Option");
         }
+    }
+
+    private void operateAccount(Account account) {
+        AccountUI accountUI;
+
+        if (account instanceof DebitAccount) {
+            accountUI = new DebitAccountUI(account);
+        } else {
+            accountUI = new CreditAccountUI(account);
+        }
+
+        accountUI.accountOperation();
     }
 
     //EFFECTS: transfer the index given by user to the index in the internal system
