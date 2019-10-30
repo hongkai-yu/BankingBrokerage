@@ -1,4 +1,6 @@
-package model;
+package model.exception;
+
+import model.exception.CannotWithdraw;
 
 public class InsufficientFundException extends CannotWithdraw {
 

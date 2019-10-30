@@ -1,17 +1,44 @@
 package model;
 
-public class DebitAccount extends Account implements UsingInterestRate {
+import model.exception.InsufficientFundException;
+import model.exception.NegativeAmountException;
 
-    public static final String ACCOUNT_TYPE = "Debit";
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class DebitAccount extends Account implements UsingInterestRate {
 
     double interestRate;
 
-//    public static final List<String> options = Collections.unmodifiableList(Arrays.asList(
-//            "Change Name", "Deposit", "Withdraw"));
-
-    //EFFECTS: create a new BankAccount
+    // Constructor
     public DebitAccount() {
         super();
+        interestRate = 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        DebitAccount that = (DebitAccount) o;
+        return Double.compare(that.interestRate, interestRate) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), interestRate);
+    }
+
+    public DebitAccount(String name) {
+        super(name);
         interestRate = 0;
     }
 
@@ -22,10 +49,53 @@ public class DebitAccount extends Account implements UsingInterestRate {
     }
 
     @Override
+    public String getType() {
+        return "Debit";
+    }
+
+    @Override
+    public List<String> getOptions() {
+        List<String> options = new ArrayList<String>();
+        options.add("Change Name");
+        options.add("Deposit");
+        options.add("Withdraw");
+        return options;
+    }
+
+    @Override
+    public double getInterestRate() {
+        return interestRate;
+    }
+
+    @Override
+    public double getValue() {
+        return getBalance();
+    }
+
+    @Override
+    public void setInterestRate(double ir) {
+        interestRate = ir;
+
+    }
+
+    @Override
     public String accountInformation() {
-        return "Account Type: " + ACCOUNT_TYPE + "\n"
+        return "Account Type: " + getType() + "\n"
                 + "Account Name: " + getName() + "\n"
                 + "Balance: " + getBalance() + "\n";
+    }
+
+
+    //MODIFIES: this
+    //EFFECTS: withdraw money from the debit account
+    public void withdrawDeposit(Double amount) throws NegativeAmountException, InsufficientFundException {
+        if (amount > getBalance()) {
+            throw new InsufficientFundException();
+        }
+        if (amount < 0) {
+            throw new NegativeAmountException();
+        }
+        subBalance(amount);
     }
 
 
@@ -41,39 +111,9 @@ public class DebitAccount extends Account implements UsingInterestRate {
         }
     }
 
-    //MODIFIES: this
-    //EFFECTS: withdraw money from the debit account
-    public void withdrawDeposit(Double amount) throws NegativeAmountException, InsufficientFundException {
-        if (amount > getBalance()) {
-            throw new InsufficientFundException();
-        }
-
-        if (amount < 0) {
-            throw new NegativeAmountException();
-        }
-
-        subBalance(amount);
-    }
-
-    @Override
-    public String optionsOfAccount() {
-        return "[1] Change name [2] Deposit [3] Withdraw";
-    }
-
     @Override
     public String saveAccountLine() {
         return "Debit " + getName() + " " + getBalance() + " " + getInterestRate();
-    }
-
-    @Override
-    public double getInterestRate() {
-        return interestRate;
-    }
-
-    @Override
-    public void setInterestRate(double ir) {
-        interestRate = ir;
-
     }
 
     @Override
@@ -81,10 +121,7 @@ public class DebitAccount extends Account implements UsingInterestRate {
         balance *= (1 + interestRate);
     }
 
-    @Override
-    public double getValue() {
-        return getBalance();
-    }
+
 
 }
 

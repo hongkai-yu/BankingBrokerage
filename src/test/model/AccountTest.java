@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class AccountTest {
@@ -16,7 +16,7 @@ public class AccountTest {
     Account c1;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         d0 = new DebitAccount();
         c0 = new CreditAccount();
         d1 = new DebitAccount("d1", 200, 0.05);
@@ -24,50 +24,64 @@ public class AccountTest {
     }
 
     @Test
-    public void testSaveAccountLine() throws IOException {
-        assertEquals(d0.saveAccountLine(), "Debit Unnamed 0.0 0.0");
-        assertEquals(c0.saveAccountLine(), "Credit Unnamed 0.0");
-        assertEquals(d1.saveAccountLine(), "Debit d1 200.0 0.05");
-        assertEquals(c1.saveAccountLine(), "Credit c1 100.0");
+    void testEqualsHashCode() {
+        assertTrue(d0.equals((d0)));
+        assertTrue(c0.equals((c0)));
+
+        assertTrue(d0.equals(new DebitAccount()));
+        assertTrue(c0.equals(new CreditAccount()));
+
+        assertFalse(d0.equals(c0));
+
+        Account d10 = new DebitAccount("d1", 200, 0);
+        Account c10 = new CreditAccount("c1",100);
+
+        assertFalse(d1.hashCode() - d10.hashCode() == 0);
+        assertFalse(d1.equals(d10));
+
+        assertTrue(c1.hashCode() - c10.hashCode() == 0);
+        assertTrue(c1.equals(c10));
     }
 
     @Test
-    public void testSetName() {
-        assertEquals(d0.getName(), "Unnamed");
+    void testSetName() {
+        assertEquals("Unnamed", d0.getName());
         d0.setName("RealName");
-        assertEquals(d0.getName(), "RealName");
+        assertEquals("RealName", d0.getName());
     }
 
     @Test
-    public void testAddBalance() {
-        assertEquals(c0.getBalance(), 0);
+    void testAddSubBalance() {
+        assertEquals(0, c0.getBalance());
         c0.addBalance(50);
-        assertEquals(c0.getBalance(), 50);
+        c0.subBalance(30);
+        assertEquals(20, c0.getBalance());
     }
 
     @Test
-    public void testSubBalance() {
-        assertEquals(d0.getBalance(), 0);
-        d0.subBalance(50);
-        assertEquals(d0.getBalance(), -50);
+    void testSaveAccountLine() throws IOException {
+        assertEquals("Debit Unnamed 0.0 0.0", d0.saveAccountLine());
+        assertEquals("Credit Unnamed 0.0", c0.saveAccountLine());
+        assertEquals("Debit d1 200.0 0.05", d1.saveAccountLine());
+        assertEquals("Credit c1 100.0", c1.saveAccountLine());
     }
 
     @Test
-    public void testAccountInformation() {
-        assertEquals(d1.accountInformation(),
-                "Account Type: Debit\n"
+    void testAccountInformation() {
+        assertEquals("Account Type: Debit\n"
                         + "Account Name: d1\n"
-                        + "Balance: 200.0\n");
-        assertEquals(c1.accountInformation(),
-                "Account Type: Credit\n"
+                        + "Balance: 200.0\n",
+                d1.accountInformation());
+        assertEquals("Account Type: Credit\n"
                         + "Account Name: c1\n"
-                        + "Balance: 100.0\n");
+                        + "Balance: 100.0\n",
+                c1.accountInformation());
     }
 
     @Test
-    public void testOptionsOfAccount() {
-        assertEquals(d1.optionsOfAccount(), "[1] Change name [2] Deposit [3] Withdraw");
-        assertEquals(c1.optionsOfAccount(), "[1] Make Purchase");
+    void testOptionsOfAccount() {
+        assertEquals("[1] Change Name [2] Deposit [3] Withdraw ", d1.optionsOfAccount());
+        assertEquals("[1] Change Name [2] Make Purchase ", c1.optionsOfAccount());
     }
 
 }

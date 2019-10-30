@@ -1,5 +1,6 @@
 package model;
 
+import model.exception.CannotWithdraw;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +24,8 @@ public class DebitAccountTest {
         debitAccount.addBalance(50);
         debitAccount.transferMoney(payee,30.0);
 
-        assertEquals(debitAccount.getValue(),20);
-        assertEquals(payee.getValue(),30);
+        assertEquals(20,debitAccount.getValue());
+        assertEquals(30,payee.getValue());
 
     }
 
@@ -39,7 +40,7 @@ public class DebitAccountTest {
             debitAccount.withdrawDeposit(a1);
             fail();
         } catch (CannotWithdraw e) {
-            assertEquals(e.response(), "Negative amount!");
+            assertEquals("Negative amount!",e.response());
         }
 
         debitAccount.setBalance(100);
@@ -54,7 +55,7 @@ public class DebitAccountTest {
             debitAccount.withdrawDeposit(a3);
             fail();
         } catch (CannotWithdraw e) {
-            assertEquals(e.response(), "Not enough fund!");
+            assertEquals("Not enough fund!",e.response());
         }
 
     }

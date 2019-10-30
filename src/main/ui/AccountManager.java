@@ -4,29 +4,16 @@ import model.Account;
 
 import java.util.Scanner;
 
-public abstract class AccountUI {
+public abstract class AccountManager {
 
-    Account account;
+    protected Account account;
 
-    public AccountUI(Account account) {
+    protected AccountManager(Account account) {
         this.account = account;
     }
 
-    public static void displayAccount(Account account) {
-        System.out.print(account.accountInformation());
-    }
-
-    //MODIFIES: this
-    //EFFECTS: change the name of the account
-    public void changeName() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please write the new name for your account:");
-        String name = scanner.nextLine();
-        account.setName(name);
-    }
-
     //EFFECTS: show the options, quit if chosen, otherwise deal with options
-    public void accountOperation() {
+    protected void accountOperation() {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             displayAccount(account);
@@ -44,6 +31,19 @@ public abstract class AccountUI {
         }
     }
 
+    protected static void displayAccount(Account account) {
+        System.out.print(account.accountInformation());
+    }
+
     //EFFECTS: deal with options
     protected abstract void chooseOptions(String option);
+
+    //MODIFIES: this
+    //EFFECTS: change the name of the account
+    protected void changeName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please write the new name for your account:");
+        String name = scanner.nextLine();
+        account.setName(name);
+    }
 }
