@@ -3,6 +3,7 @@ package model;
 import model.exception.DuplicateAccounts;
 import model.exception.InvalidOperation;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -11,36 +12,31 @@ import java.util.*;
 
 
 public class Customer {
+
     private String userName;
+//    private String password;
+
+    private IdentityChecker identityChecker;
+
     private Map<String, Account> accountsMap;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Customer customer = (Customer) o;
-        return userName.equals(customer.userName)
-                && accountsMap.equals(customer.accountsMap);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName, accountsMap);
-    }
 
     // Constructor
     public Customer() {
         userName = "Unnamed";
+//        password = "password";
+        identityChecker = new IdentityChecker("password");
         accountsMap = new HashMap<>();
     }
 
     public String getUserName() {
         return userName;
     }
+
+//    public String getPassword() {
+//        return password;
+//    }
 
     public Map<String, Account> getAccountsMap() {
         return accountsMap;
@@ -55,6 +51,10 @@ public class Customer {
         userName = name;
     }
 
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+
     //EFFECTS: add an account to this customer
     public boolean addAccount(Account account) {
         if (!accountsMap.containsKey(account.getName())) {
@@ -66,18 +66,6 @@ public class Customer {
         }
     }
 
-    //EFFECTS: remove an account to the bank accounts, based on the account
-//    public void removeAccount(Account account) {
-//        accountsMap.remove(account.getName());
-//    }
-
-//    // Overload
-//    //EFFECTS: remove an account to the bank accounts, based on index
-//    public void removeAccount(int index) {
-//        accountsMap.remove(accountsMap.get(index));
-//    }
-
-    //EFFECTS: remove an account to the bank accounts, based on the account's name
     public boolean removeAccount(String accountName) {
         if (accountsMap.containsKey(accountName)) {
             accountsMap.remove(accountName);
@@ -98,6 +86,14 @@ public class Customer {
         return accountsMap.size();
     }
 
+    public String optionsOfCustomer() {
+        List<String> options = new ArrayList<>();
+        options.add("Open An Account");
+        options.add(("Remove An Account"));
+        options.add("Operate An Account");
+        options.add("Save");
+        return OptionsGenerator.generateOptions(options);
+    }
 
     //MODIFIES: this.accounts
     //EFFECTS: add a new unnamed debit account to the accounts
@@ -146,6 +142,11 @@ public class Customer {
         writer.close();
     }
 
+    public boolean checkPassword(String input) {
+//        return password.equals(input);
+        return identityChecker.checkPassword(input);
+    }
+
     private static ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
@@ -157,9 +158,27 @@ public class Customer {
             String accountName = account.getName();
             if (!key.equals(accountName)) {
                 removeAccount(key);
-                getAccountsMap().put(accountName,account);
+                getAccountsMap().put(accountName, account);
             }
         }
     }
+
+    //    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Customer customer = (Customer) o;
+//        return userName.equals(customer.userName)
+//                && accountsMap.equals(customer.accountsMap);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(userName, accountsMap);
+//    }
 
 }

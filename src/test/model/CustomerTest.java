@@ -33,14 +33,14 @@ public class CustomerTest {
         DebitAccount a1 = new DebitAccount("a1");
         CreditAccount a2 = new CreditAccount("a2");
 
-        assertTrue(a1.getCustomer() == null);
-        assertTrue(a2.getCustomer() == null);
+        assertNull(a1.getCustomer());
+        assertNull(a2.getCustomer());
 
         assertTrue(customer.addAccount(a1));
         assertEquals(1, customer.numberOfAccounts());
         assertTrue(customer.getAccountsMap().containsValue(a1));
 
-        assertTrue(a1.getCustomer().equals(customer));
+        assertEquals(a1.getCustomer(), customer);
 
         assertFalse(customer.addAccount(a1));
         assertEquals(1, customer.numberOfAccounts());
@@ -49,19 +49,19 @@ public class CustomerTest {
         assertEquals(2, customer.numberOfAccounts());
         assertTrue(customer.getAccountsMap().containsValue(a2));
 
-        assertTrue(a2.getCustomer().equals(customer));
+        assertEquals(a2.getCustomer(), customer);
 
         assertTrue(customer.removeAccount(a1));
         assertEquals(1, customer.numberOfAccounts());
         assertTrue(customer.getAccountsMap().containsValue(a2));
 
-        assertTrue(a1.getCustomer() == null);
+        assertNull(a1.getCustomer());
 
         assertTrue( customer.removeAccount(a2.getName()));
         assertEquals(0, customer.numberOfAccounts());
         assertFalse(customer.getAccountsMap().containsValue(a2));
 
-        assertTrue(a1.getCustomer() == null);
+        assertNull(a1.getCustomer());
 
         assertFalse(customer.removeAccount(a1.getName()));
     }
@@ -121,14 +121,18 @@ public class CustomerTest {
         assertEquals(customer.getUserName(), loadedCustomer1.getUserName());
         assertEquals(customer.getAccountsMap().size(), loadedCustomer1.getAccountsMap().size());
 
-//        int size = loadedBankAccounts1.accounts.size();
+//        int size = loadedBankAccounts1.accounts.size()
 //        for (int i = 0; i <= size; i++) {
 //            assertTrue(loadedBankAccounts1.accounts.get(i).equals(bankAccounts.accounts.get(i)));
 //        }
 
     }
 
-
+    @Test
+    void testOptionsOfCustomer() {
+    assertEquals("[1] Open An Account [2] Remove An Account [3] Operate An Account [4] Save ",
+                customer.optionsOfCustomer());
+    }
 }
 
 

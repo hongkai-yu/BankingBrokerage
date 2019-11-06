@@ -13,7 +13,11 @@ public class BankDemo {
         customer.loadAccounts(FILE_PATH);
         CustomerManager customerManager = new CustomerManager(customer);
         customerManager.changeUserName();
-        customerManager.bankAccountsOperation();
+        if (customerManager.isPasswordCorrect()) {
+            customerManager.bankAccountsOperation();
+        } else {
+            System.out.println("Wrong Password!");
+        }
     }
 
     public static void main(String[] args) throws IOException {

@@ -16,10 +16,10 @@ public abstract class AccountManager {
     protected void accountOperation() {
         while (true) {
             Scanner scanner = new Scanner(System.in);
-            displayAccount(account);
+            displayAccount();
             System.out.println("What do you want to do with your account?");
             System.out.print(account.optionsOfAccount());
-            System.out.println(" [Q] Quit");
+            System.out.println("[Q] Quit");
             String option = scanner.nextLine();
 
             if (option.equals("Q")) {
@@ -31,7 +31,7 @@ public abstract class AccountManager {
         }
     }
 
-    protected static void displayAccount(Account account) {
+    protected void displayAccount() {
         System.out.print(account.accountInformation());
     }
 

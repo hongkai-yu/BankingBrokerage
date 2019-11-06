@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,14 +100,24 @@ public abstract class Account {
 
     //EFFECT: return the String of options available
     public String optionsOfAccount() {
-        String result = "";
-        for (int i = 0; i < getOptions().size(); i++) {
-            int index = i + 1;
-            result += "[" + index + "] " + getOptions().get(i) + " ";
-        }
-        return result;
+        return OptionsGenerator.generateOptions(getOptions());
+//        String result = "";
+//        for (int i = 0; i < getOptions().size(); i++) {
+//            int index = i + 1;
+//            result += "[" + index + "] " + getOptions().get(i) + " ";
+//        }
+//        return result;
     }
 
     //EFFECTS: get an overview of the account
     public abstract String accountInformation();
+
+//    @Override
+//    public String toString() {
+//        return "Account{"
+//                + "balance=" + balance
+//                + ", name='" + name + '\''
+//                + ", customer=" + customer
+//                + '}';
+//    }
 }

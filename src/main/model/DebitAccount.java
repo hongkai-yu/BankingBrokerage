@@ -9,12 +9,23 @@ import java.util.Objects;
 
 public class DebitAccount extends Account implements UsingInterestRate {
 
-    double interestRate;
+    private double interestRate;
 
     // Constructor
     public DebitAccount() {
         super();
         interestRate = 0;
+    }
+
+    public DebitAccount(String name) {
+        super(name);
+        interestRate = 0;
+    }
+
+    // Overload
+    public DebitAccount(String n, double b, double ir) {
+        super(n, b);
+        interestRate = ir;
     }
 
     @Override
@@ -35,17 +46,6 @@ public class DebitAccount extends Account implements UsingInterestRate {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), interestRate);
-    }
-
-    public DebitAccount(String name) {
-        super(name);
-        interestRate = 0;
-    }
-
-    // Overload
-    public DebitAccount(String n, double b, double ir) {
-        super(n, b);
-        interestRate = ir;
     }
 
     @Override
@@ -98,6 +98,11 @@ public class DebitAccount extends Account implements UsingInterestRate {
         subBalance(amount);
     }
 
+//    @Override
+//    public String optionsOfAccount() {
+//        return "[1] Change Name [2] Deposit [3] Withdraw ";
+//    }
+
 
     //MODIFIES: this, account
     //EFFECTS: transfer money from this to account, true if succeeded, false otherwise.
@@ -120,8 +125,6 @@ public class DebitAccount extends Account implements UsingInterestRate {
     public void updateNextPeriod() {
         balance *= (1 + interestRate);
     }
-
-
 
 }
 

@@ -2,10 +2,14 @@ package ui;
 
 import model.Account;
 import model.Customer;
+import model.OptionsGenerator;
 import model.exception.DuplicateAccounts;
 import model.exception.InvalidOperation;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CustomerManager {
@@ -25,17 +29,26 @@ public class CustomerManager {
         customer.setUserName(name);
     }
 
+    public boolean isPasswordCorrect() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please enter your password: ");
+        String password = scanner.nextLine();
+        return customer.checkPassword(password);
+    }
+
     //EFFECTS: show the options to user, quit if chosen, otherwise deal with options
     public void bankAccountsOperation() throws IOException {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             accountOverview();
-            System.out.println("[1] Open an account [2] Remove an account [3] Operate an account [S] Save [Q] Quit");
+//            System.out.print(customer.optionsOfCustomer());
+//            System.out.println("[Q] Quit");
+            System.out.println("[1] Open an account [2] Remove an account [3] Operate an account [4] Save [Q] Quit");
             String option = scanner.nextLine();
             if (option.equals("Q")) {
                 System.out.println("Thank you!");
                 break;
-            } else if (option.equals("S")) {
+            } else if (option.equals("4")) {
                 customer.saveAccounts(FILE_PATH);
                 continue;
             }
@@ -84,7 +97,11 @@ public class CustomerManager {
     private void openAccount() throws InvalidOperation {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Which type of account do you want to open?");
-        System.out.println("[1] Debit [2] Credit");
+//        System.out.println("[1] Debit [2] Credit");
+        List<String> accountTypes = new ArrayList<>();
+        accountTypes.add("Debit");
+        accountTypes.add("Credit");
+        System.out.println(OptionsGenerator.generateOptions(accountTypes));
         String option = scanner.nextLine();
         System.out.print("Please name your new account: ");
         String name = scanner.nextLine();

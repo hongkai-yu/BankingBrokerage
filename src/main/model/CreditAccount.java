@@ -30,6 +30,10 @@ public class CreditAccount extends Account {
         return options;
     }
 
+//    @Override
+//    public String optionsOfAccount() {
+//        return "[1] Change Name [2] Make Purchase ";
+//    }
 
     //EFFECTS: get an overview of the account
     @Override
