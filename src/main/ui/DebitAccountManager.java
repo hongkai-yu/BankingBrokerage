@@ -1,7 +1,7 @@
 package ui;
 
 import model.*;
-import model.exception.CannotWithdraw;
+import model.exception.NegativeAmountException;
 
 import java.util.Scanner;
 
@@ -53,8 +53,12 @@ public class DebitAccountManager extends AccountManager {
         double withdraw = Double.parseDouble(scanner.nextLine());
 
         try {
-            debitAccount.withdrawDeposit(withdraw);
-        } catch (CannotWithdraw e) {
+            if (debitAccount.withdrawDeposit(withdraw)) {
+                System.out.println("Withdraw Successful");
+            } else {
+                System.out.println("Not enough Fund");
+            }
+        } catch (NegativeAmountException e) {
             System.out.println(e.response());
         } finally {
             System.out.println("Tried Withdraw");

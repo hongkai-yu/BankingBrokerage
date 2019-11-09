@@ -6,23 +6,23 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class UsingInterestRateTest {
+class UsingInterestRateTest {
 
-    public UsingInterestRate d0;
-    public UsingInterestRate d1;
-    public UsingInterestRate w0;
-    public UsingInterestRate w1;
+    private UsingInterestRate d0;
+    private UsingInterestRate d1;
+    private UsingInterestRate w0;
+    private UsingInterestRate w1;
 
     @BeforeEach
-    public void setup() {
-        d0 = new DebitAccount();
+    void setup() {
+        d0 = new DebitAccount("d0");
         d1 = new DebitAccount("d1", 200, 0.05);
         w0 = new WeirdFinancialProduct(0,0);
         w1 = new WeirdFinancialProduct(100,0.05);
     }
 
     @Test
-    public void testUpdateNextPeriod() {
+    void testUpdateNextPeriod() {
         d0.updateNextPeriod();
         assertEquals(0,d0.getValue());
 

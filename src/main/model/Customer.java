@@ -2,12 +2,9 @@ package model;
 
 import model.exception.DuplicateAccounts;
 import model.exception.InvalidOperation;
+import model.exception.NoSuchAccountException;
 
-import javax.swing.text.html.Option;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.*;
 
 
@@ -23,27 +20,19 @@ public class Customer {
 
 
     // Constructor
-    public Customer() {
-        userName = "Unnamed";
-//        password = "password";
+    public Customer(String userName, String password) {
+        this.userName = userName;
         identityChecker = new IdentityChecker("password");
-        accountsMap = new HashMap<>();
+        setPassword(password);
+        accounts = new HashSet<>();
     }
 
     public String getUserName() {
         return userName;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
-
-    public Map<String, Account> getAccountsMap() {
-        return accountsMap;
-    }
-
-    public Set<String> getAccountsName() {
-        return accountsMap.keySet();
+    public Set<Account> getAccounts() {
+        return accounts;
     }
 
     //EFFECTS: set the username of the bank account
@@ -57,18 +46,9 @@ public class Customer {
 
     //EFFECTS: add an account to this customer
     public boolean addAccount(Account account) {
-        if (!accountsMap.containsKey(account.getName())) {
-            accountsMap.put(account.getName(), account);
+        if (!accounts.contains(account)) {
+            accounts.add(account);
             account.setCustomer(this);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean removeAccount(String accountName) {
-        if (accountsMap.containsKey(accountName)) {
-            accountsMap.remove(accountName);
             return true;
         } else {
             return false;
@@ -77,23 +57,33 @@ public class Customer {
 
     //EFFECTS: remove an account to the bank accounts, based on the account
     public boolean removeAccount(Account account) {
-        account.removeCustomer();
-        return removeAccount(account.getName());
+        if (accounts.contains(account)) {
+            accounts.remove(account);
+            account.removeCustomer();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean removeAccount(String accountName) throws NoSuchAccountException {
+        return removeAccount(getAccountByName(accountName));
     }
 
     //EFFECTS: Return the number of accounts in the list
     public int numberOfAccounts() {
-        return accountsMap.size();
+        return accounts.size();
     }
 
-    public String optionsOfCustomer() {
+    public List<String> getOptions() {
         List<String> options = new ArrayList<>();
         options.add("Open An Account");
-        options.add(("Remove An Account"));
+        options.add("Remove An Account");
         options.add("Operate An Account");
         options.add("Save");
-        return OptionsGenerator.generateOptions(options);
+        return options;
     }
+
 
     //MODIFIES: this.accounts
     //EFFECTS: add a new unnamed debit account to the accounts
@@ -147,22 +137,6 @@ public class Customer {
         return identityChecker.checkPassword(input);
     }
 
-    private static ArrayList<String> splitOnSpace(String line) {
-        String[] splits = line.split(" ");
-        return new ArrayList<>(Arrays.asList(splits));
-    }
-
-    public void updateName() {
-        for (String key : getAccountsMap().keySet()) {
-            Account account = getAccountsMap().get(key);
-            String accountName = account.getName();
-            if (!key.equals(accountName)) {
-                removeAccount(key);
-                getAccountsMap().put(accountName, account);
-            }
-        }
-    }
-
     //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) {
@@ -181,4 +155,14 @@ public class Customer {
 //        return Objects.hash(userName, accountsMap);
 //    }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        double interestRate = (double) arg;
+        for (Account account : accounts) {
+            if (account.getType().equals("Debit")) {
+                DebitAccount debitAccount = (DebitAccount) account;
+                debitAccount.setInterestRate(interestRate);
+            }
+        }
+    }
 }

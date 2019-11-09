@@ -5,47 +5,25 @@ import model.exception.NegativeAmountException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class DebitAccount extends Account implements UsingInterestRate {
 
     private double interestRate;
 
     // Constructor
-    public DebitAccount() {
-        super();
-        interestRate = 0;
-    }
-
     public DebitAccount(String name) {
         super(name);
         interestRate = 0;
     }
 
-    // Overload
-    public DebitAccount(String n, double b, double ir) {
-        super(n, b);
-        interestRate = ir;
+    public DebitAccount(String name, double balance) {
+        super(name, balance);
+        interestRate = 0;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        DebitAccount that = (DebitAccount) o;
-        return Double.compare(that.interestRate, interestRate) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), interestRate);
+    public DebitAccount(String name, double balance, double interestRate) {
+        super(name, balance);
+        this.interestRate = interestRate;
     }
 
     @Override
@@ -75,7 +53,6 @@ public class DebitAccount extends Account implements UsingInterestRate {
     @Override
     public void setInterestRate(double ir) {
         interestRate = ir;
-
     }
 
     @Override

@@ -4,12 +4,13 @@ import model.exception.DuplicateAccounts;
 import model.exception.InvalidOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ui.OptionsGenerator;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CustomerTest {
+class CustomerTest {
 
     private static final String TEST_FILE_PATH = "./data/testBankAccounts.txt";
 
@@ -17,7 +18,7 @@ public class CustomerTest {
 
     @BeforeEach
     void runBefore() {
-        customer = new Customer();
+        customer = new Customer("Unnamed","123456");
     }
 
     @Test
@@ -38,7 +39,7 @@ public class CustomerTest {
 
         assertTrue(customer.addAccount(a1));
         assertEquals(1, customer.numberOfAccounts());
-        assertTrue(customer.getAccountsMap().containsValue(a1));
+        assertTrue(customer.hasAccount(a1));
 
         assertEquals(a1.getCustomer(), customer);
 
@@ -47,23 +48,23 @@ public class CustomerTest {
 
         assertTrue(customer.addAccount(a2));
         assertEquals(2, customer.numberOfAccounts());
-        assertTrue(customer.getAccountsMap().containsValue(a2));
+        assertTrue(customer.hasAccount(a2));
 
         assertEquals(a2.getCustomer(), customer);
 
         assertTrue(customer.removeAccount(a1));
         assertEquals(1, customer.numberOfAccounts());
-        assertTrue(customer.getAccountsMap().containsValue(a2));
+        assertTrue(customer.hasAccount(a2));
 
         assertNull(a1.getCustomer());
 
         assertTrue( customer.removeAccount(a2.getName()));
         assertEquals(0, customer.numberOfAccounts());
-        assertFalse(customer.getAccountsMap().containsValue(a2));
+        assertFalse(customer.hasAccount(a2));
 
         assertNull(a1.getCustomer());
 
-        assertFalse(customer.removeAccount(a1.getName()));
+        assertFalse(customer.removeAccount(a1));
     }
 
     @Test
@@ -101,7 +102,7 @@ public class CustomerTest {
         }
 
         try {
-            customer.openAccount("2", "A1");
+            customer.openAccount("1", "A1");
             fail("Should have throw DuplicateAccounts.");
         } catch (InvalidOperation invalidOperation) {
             fail();

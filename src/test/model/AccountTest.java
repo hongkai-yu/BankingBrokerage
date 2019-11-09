@@ -3,49 +3,49 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+class AccountTest {
 
-public class AccountTest {
-
-    Account d0;
-    Account c0;
-    Account d1;
-    Account c1;
+    private Account d0;
+    private Account c0;
+    private Account d1;
+    private Account c1;
 
     @BeforeEach
     void setup() {
-        d0 = new DebitAccount();
-        c0 = new CreditAccount();
+        d0 = new DebitAccount("d0");
+        c0 = new CreditAccount("d0");
         d1 = new DebitAccount("d1", 200, 0.05);
         c1 = new CreditAccount("c1", 100);
     }
 
     @Test
     void testEqualsHashCode() {
-        assertTrue(d0.equals((d0)));
-        assertTrue(c0.equals((c0)));
+        assertEquals(d0, d0);
+        assertEquals(c0, c0);
 
-        assertTrue(d0.equals(new DebitAccount()));
-        assertTrue(c0.equals(new CreditAccount()));
+        assertEquals(d0, new DebitAccount("d0", 1000));
+        assertEquals(c0, new CreditAccount("d0",200));
 
-        assertFalse(d0.equals(c0));
+        assertNotEquals(d0, c0);
 
         Account d10 = new DebitAccount("d1", 200, 0);
         Account c10 = new CreditAccount("c1",100);
 
-        assertFalse(d1.hashCode() - d10.hashCode() == 0);
-        assertFalse(d1.equals(d10));
+        assertEquals(d1.hashCode(), d10.hashCode());
+        assertEquals(d1, d10);
 
-        assertTrue(c1.hashCode() - c10.hashCode() == 0);
-        assertTrue(c1.equals(c10));
+        assertEquals( c1.hashCode(), c10.hashCode());
+        assertEquals(c1, c10);
     }
 
     @Test
     void testSetName() {
-        assertEquals("Unnamed", d0.getName());
         d0.setName("RealName");
         assertEquals("RealName", d0.getName());
     }
@@ -74,14 +74,8 @@ public class AccountTest {
                 d1.accountInformation());
         assertEquals("Account Type: Credit\n"
                         + "Account Name: c1\n"
-                        + "Balance: 100.0\n",
+                        + "Balance: 0.0\n",
                 c1.accountInformation());
-    }
-
-    @Test
-    void testOptionsOfAccount() {
-        assertEquals("[1] Change Name [2] Deposit [3] Withdraw ", d1.optionsOfAccount());
-        assertEquals("[1] Change Name [2] Make Purchase ", c1.optionsOfAccount());
     }
 
 }

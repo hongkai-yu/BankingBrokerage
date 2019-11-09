@@ -18,7 +18,7 @@ public abstract class AccountManager {
             Scanner scanner = new Scanner(System.in);
             displayAccount();
             System.out.println("What do you want to do with your account?");
-            System.out.print(account.optionsOfAccount());
+            System.out.print(optionsOfAccount());
             System.out.println("[Q] Quit");
             String option = scanner.nextLine();
 
@@ -29,6 +29,11 @@ public abstract class AccountManager {
 
             chooseOptions(option);
         }
+    }
+
+    //EFFECT: return the String of options available
+    public String optionsOfAccount() {
+        return OptionsGenerator.generateOptions(account.getOptions());
     }
 
     protected void displayAccount() {

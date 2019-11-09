@@ -28,20 +28,33 @@ public abstract class Account {
     }
 
     // Constructors
-    public Account() {
-        name = "Unnamed";
-        balance = 0;
-    }
-
     public Account(String name) {
         this.name = name;
         balance = 0;
     }
 
     // Overload
-    public Account(String n, double b) {
-        name = n;
-        balance = b;
+    public Account(String name, double balance) {
+        this.name = name;
+        this.balance = balance;
+    }
+
+    // only consider the name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Account account = (Account) o;
+        return name.equals(account.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     public String getName() {
@@ -84,7 +97,11 @@ public abstract class Account {
     }
 
     public void removeCustomer() {
-        this.customer = null;
+        if (!(getCustomer() == null)) {
+            Customer saveCustomer = getCustomer();
+            this.customer = null;
+            saveCustomer.removeAccount(this);
+        }
     }
 
     public void addBalance(double add) {

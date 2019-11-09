@@ -4,17 +4,24 @@ import java.util.*;
 
 public class CreditAccount extends Account {
 
-    // Constructor
-    public CreditAccount() {
-        super();
-    }
+    private double credit;
 
+    // Constructor
     public CreditAccount(String name) {
         super(name);
     }
 
-    public CreditAccount(String n, double b) {
-        super(n, b);
+    public CreditAccount(String name, double credit) {
+        super(name);
+        this.credit = credit;
+    }
+
+    public void setCredit(double credit) {
+        this.credit = credit;
+    }
+
+    public double getCredit() {
+        return credit;
     }
 
     @Override
@@ -30,10 +37,22 @@ public class CreditAccount extends Account {
         return options;
     }
 
-//    @Override
-//    public String optionsOfAccount() {
-//        return "[1] Change Name [2] Make Purchase ";
-//    }
+    public double getCreditRemain() {
+        return credit - balance;
+    }
+
+    public boolean makePurchase(double amount) {
+        if (balance + amount > credit) {
+            return false;
+        } else {
+            balance += amount;
+            return true;
+        }
+    }
+
+    public boolean requestPayment(TransferableAccount payer, double amount) {
+        return payer.transferMoney(this,amount);
+    }
 
     //EFFECTS: get an overview of the account
     @Override
@@ -43,9 +62,5 @@ public class CreditAccount extends Account {
                 + "Balance: " + getBalance() + "\n";
     }
 
-    @Override
-    public String saveAccountLine() {
-        return "Credit " + getName() + " " + getBalance();
-    }
 }
 
