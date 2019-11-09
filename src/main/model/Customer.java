@@ -8,16 +8,12 @@ import java.io.*;
 import java.util.*;
 
 
-public class Customer {
+public class Customer implements Serializable, Observer {
 
     private String userName;
-//    private String password;
-
     private IdentityChecker identityChecker;
-
-    private Map<String, Account> accountsMap;
-
-
+    private Set<Account> accounts;
+    private Bank bank;
 
     // Constructor
     public Customer(String userName, String password) {
@@ -35,14 +31,42 @@ public class Customer {
         return accounts;
     }
 
+    public Bank getBank() {
+        return bank;
+    }
+
     //EFFECTS: set the username of the bank account
     public void setUserName(String name) {
         userName = name;
     }
 
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+    public void setPassword(String password) {
+        identityChecker.setPassword(password);
+    }
+
+    public void setBank(Bank bank) {
+        if (getBank() == null) {
+            this.bank = bank;
+            getBank().addCustomer(this);
+        } else if (!getBank().equals(bank)) {
+            getBank().removeCustomer(this);
+            this.bank = bank;
+            getBank().addCustomer(this);
+        }
+    }
+
+    public boolean hasAccount(Account account) {
+        return getAccounts().contains(account);
+    }
+
+    public Account getAccountByName(String name) throws NoSuchAccountException {
+        for (Account account : accounts) {
+            if (account.getName().equals(name)) {
+                return account;
+            }
+        }
+        throw new NoSuchAccountException();
+    }
 
     //EFFECTS: add an account to this customer
     public boolean addAccount(Account account) {
@@ -68,6 +92,14 @@ public class Customer {
 
     public boolean removeAccount(String accountName) throws NoSuchAccountException {
         return removeAccount(getAccountByName(accountName));
+    }
+
+    public void removeBank() {
+        if (!(getBank() == null)) {
+            Bank saveBank = getBank();
+            bank = null;
+            saveBank.removeCustomer(this);
+        }
     }
 
     //EFFECTS: Return the number of accounts in the list
@@ -107,53 +139,27 @@ public class Customer {
         }
     }
 
-    public void loadAccounts(String path) throws IOException {
-//        List<String> lines = Files.readAllLines(Paths.get("./data/BankAccounts.txt"));
-        List<String> lines = Files.readAllLines(Paths.get(path));
-        for (String line : lines) {
-            ArrayList<String> partsOfLine = splitOnSpace(line);
-            String type = partsOfLine.get(0);
-            if (type.equals("Credit")) {
-                addAccount(new CreditAccount(
-                        partsOfLine.get(1), Double.parseDouble(partsOfLine.get(2))));
-            } else if (type.equals("Debit")) {
-                addAccount(new DebitAccount(
-                        partsOfLine.get(1), Double.parseDouble(partsOfLine.get(2)),
-                        Double.parseDouble(partsOfLine.get(3))));
-            }
-        }
-    }
-
-    public void saveAccounts(String path) throws IOException {
-        PrintWriter writer = new PrintWriter(path, "UTF-8");
-        for (Account next : accountsMap.values()) {
-            writer.println(next.saveAccountLine());
-        }
-        writer.close();
-    }
-
     public boolean checkPassword(String input) {
-//        return password.equals(input);
         return identityChecker.checkPassword(input);
     }
 
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        Customer customer = (Customer) o;
-//        return userName.equals(customer.userName)
-//                && accountsMap.equals(customer.accountsMap);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(userName, accountsMap);
-//    }
+    // Only compare UserName;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Customer customer = (Customer) o;
+        return userName.equals(customer.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName);
+    }
 
     @Override
     public void update(Observable o, Object arg) {

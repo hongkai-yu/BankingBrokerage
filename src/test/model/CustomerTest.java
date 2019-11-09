@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
 
-    private static final String TEST_FILE_PATH = "./data/testBankAccounts.txt";
 
     private Customer customer;
 
@@ -58,7 +57,7 @@ class CustomerTest {
 
         assertNull(a1.getCustomer());
 
-        assertTrue( customer.removeAccount(a2.getName()));
+        assertTrue(customer.removeAccount(a2));
         assertEquals(0, customer.numberOfAccounts());
         assertFalse(customer.hasAccount(a2));
 
@@ -82,6 +81,7 @@ class CustomerTest {
             fail();
         }
         assertEquals(2, customer.numberOfAccounts());
+
     }
 
     @Test
@@ -113,26 +113,9 @@ class CustomerTest {
     }
 
     @Test
-    void testSaveAndLoadAccounts() throws IOException {
-        customer.addAccount(new CreditAccount("C1", 200));
-        customer.saveAccounts(TEST_FILE_PATH);
-
-        Customer loadedCustomer1 = new Customer();
-        loadedCustomer1.loadAccounts(TEST_FILE_PATH);
-        assertEquals(customer.getUserName(), loadedCustomer1.getUserName());
-        assertEquals(customer.getAccountsMap().size(), loadedCustomer1.getAccountsMap().size());
-
-//        int size = loadedBankAccounts1.accounts.size()
-//        for (int i = 0; i <= size; i++) {
-//            assertTrue(loadedBankAccounts1.accounts.get(i).equals(bankAccounts.accounts.get(i)));
-//        }
-
-    }
-
-    @Test
     void testOptionsOfCustomer() {
-    assertEquals("[1] Open An Account [2] Remove An Account [3] Operate An Account [4] Save ",
-                customer.optionsOfCustomer());
+        assertEquals("[1] Open An Account [2] Remove An Account [3] Operate An Account [4] Save ",
+                OptionsGenerator.generateOptions(customer.getOptions()));
     }
 }
 

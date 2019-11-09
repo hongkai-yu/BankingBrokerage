@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DebitAccountTest {
+class TransferableAccountTest {
 
-    public DebitAccount debitAccount;
+    private TransferableAccount transferableAccount;
 
     @BeforeEach
-    public void runBefore() {
-        debitAccount = new DebitAccount();
+    void runBefore() {
+        transferableAccount = new DebitAccount("debit");
     }
 
     @Test
@@ -22,12 +22,17 @@ public class DebitAccountTest {
         transferableAccount.addBalance(10);
         assertFalse(transferableAccount.transferMoney(payee, 50.0));
 
-        debitAccount.addBalance(50);
-        debitAccount.transferMoney(payee,30.0);
+        transferableAccount.addBalance(50);
+        assertTrue( transferableAccount.transferMoney(payee, 30.0));
 
-        assertEquals(20,debitAccount.getValue());
-        assertEquals(30,payee.getValue());
+        assertEquals(30, transferableAccount.getBalance());
+        assertEquals(30, payee.getBalance());
 
+        CreditAccount payeeCreditCard = new CreditAccount("Credit",1000);
+        assertTrue(payeeCreditCard.makePurchase(10));
+        assertTrue(transferableAccount.transferMoney(payeeCreditCard, 20.0));
+        assertEquals(10,transferableAccount.getBalance());
+        assertEquals(-10,payeeCreditCard.getBalance());
     }
 
     @Test
@@ -36,22 +41,21 @@ public class DebitAccountTest {
         double a2 = 10;
         double a3 = 100000;
 
-        debitAccount.setBalance(100);
+        transferableAccount.setBalance(100);
         try {
-            debitAccount.withdrawDeposit(a1);
+            transferableAccount.withdrawDeposit(a1);
             fail();
         } catch (NegativeAmountException e) {
             assertEquals("Negative amount!", e.response());
         }
 
-        debitAccount.setBalance(100);
         try {
-            debitAccount.withdrawDeposit(a2);
-        } catch (CannotWithdraw e) {
+            assertTrue(transferableAccount.withdrawDeposit(a2));
+        } catch (NegativeAmountException e) {
             fail();
         }
 
-        debitAccount.setBalance(100);
+        transferableAccount.setBalance(100);
         try {
             assertFalse(transferableAccount.withdrawDeposit(a3));
         } catch (NegativeAmountException e) {

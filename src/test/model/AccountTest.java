@@ -58,13 +58,13 @@ class AccountTest {
         assertEquals(20, c0.getBalance());
     }
 
-    @Test
-    void testSaveAccountLine() throws IOException {
-        assertEquals("Debit Unnamed 0.0 0.0", d0.saveAccountLine());
-        assertEquals("Credit Unnamed 0.0", c0.saveAccountLine());
-        assertEquals("Debit d1 200.0 0.05", d1.saveAccountLine());
-        assertEquals("Credit c1 100.0", c1.saveAccountLine());
-    }
+//    @Test
+//    void testSaveAccountLine() throws IOException {
+//        assertEquals("Debit Unnamed 0.0 0.0", d0.saveAccountLine());
+//        assertEquals("Credit Unnamed 0.0", c0.saveAccountLine());
+//        assertEquals("Debit d1 200.0 0.05", d1.saveAccountLine());
+//        assertEquals("Credit c1 100.0", c1.saveAccountLine());
+//    }
 
     @Test
     void testAccountInformation() {

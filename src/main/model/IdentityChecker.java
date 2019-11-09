@@ -1,11 +1,13 @@
 package model;
 
-public class IdentityChecker {
+import java.io.Serializable;
+
+public class IdentityChecker implements Serializable {
 
     private String password;
 
     public IdentityChecker() {
-        password = "";
+        password = ""; // no password
     }
 
     public IdentityChecker(String password) {
