@@ -1,11 +1,9 @@
 package model;
 
+import model.investment.InvestmentAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import ui.OptionsGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +13,7 @@ class AccountTest {
     private Account c0;
     private Account d1;
     private Account c1;
+    private Account i1;
 
     @BeforeEach
     void setup() {
@@ -22,6 +21,7 @@ class AccountTest {
         c0 = new CreditAccount("d0");
         d1 = new DebitAccount("d1", 200, 0.05);
         c1 = new CreditAccount("c1", 100);
+        i1 = new InvestmentAccount("i1", 100.0);
     }
 
     @Test
@@ -58,13 +58,6 @@ class AccountTest {
         assertEquals(20, c0.getBalance());
     }
 
-//    @Test
-//    void testSaveAccountLine() throws IOException {
-//        assertEquals("Debit Unnamed 0.0 0.0", d0.saveAccountLine());
-//        assertEquals("Credit Unnamed 0.0", c0.saveAccountLine());
-//        assertEquals("Debit d1 200.0 0.05", d1.saveAccountLine());
-//        assertEquals("Credit c1 100.0", c1.saveAccountLine());
-//    }
 
     @Test
     void testAccountInformation() {
@@ -76,6 +69,16 @@ class AccountTest {
                         + "Account Name: c1\n"
                         + "Balance: 0.0\n",
                 c1.accountInformation());
+    }
+
+    @Test
+    void testGetOptions() {
+        assertEquals("[1] Change Name [2] Deposit [3] Withdraw ",
+                OptionsGenerator.generateOptions(d1.getOptions()));
+        assertEquals("[1] Change Name [2] Make Purchase ",
+                OptionsGenerator.generateOptions(c1.getOptions()));
+        assertEquals("[1] Change Name [2] Buy Stocks [3] Sell Stocks ",
+                OptionsGenerator.generateOptions(i1.getOptions()));
     }
 
 }

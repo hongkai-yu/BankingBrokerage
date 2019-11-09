@@ -14,8 +14,8 @@ public class InvestmentAccount extends TransferableAccount {
         stocksBook = new HashMap<>();
     }
 
-    public InvestmentAccount(String n, double b) {
-        super(n, b);
+    public InvestmentAccount(String name, double balance) {
+        super(name, balance);
         stocksBook = new HashMap<>();
     }
 
@@ -94,6 +94,7 @@ public class InvestmentAccount extends TransferableAccount {
     @Override
     public List<String> getOptions() {
         List<String> options = new ArrayList<>();
+        options.add("Change Name");
         options.add("Buy Stocks");
         options.add("Sell Stocks");
         return options;

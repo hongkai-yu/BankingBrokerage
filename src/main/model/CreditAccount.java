@@ -29,13 +29,13 @@ public class CreditAccount extends Account {
         return "Credit";
     }
 
-//    @Override
-//    public List<String> getOptions() {
-//        List<String> options = new ArrayList<String>();
-//        options.add("Change Name");
-//        options.add("Make Purchase");
-//        return options;
-//    }
+    @Override
+    public List<String> getOptions() {
+        List<String> options = new ArrayList<String>();
+        options.add("Change Name");
+        options.add("Make Purchase");
+        return options;
+    }
 
     public double getCreditRemain() {
         return credit - balance;
