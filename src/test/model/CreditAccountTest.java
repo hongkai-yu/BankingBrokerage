@@ -32,5 +32,8 @@ class CreditAccountTest {
         assertTrue(creditAccount.requestPayment(payer,50));
         assertEquals(450, creditAccount.getBalance());
         assertEquals(550,creditAccount.getCreditRemain());
+
+        creditAccount.setCredit(1100);
+        assertEquals(650,creditAccount.getCreditRemain());
     }
 }

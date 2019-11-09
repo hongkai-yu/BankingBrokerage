@@ -28,14 +28,14 @@ public class DebitAccount extends TransferableAccount implements UsingInterestRa
         return "Debit";
     }
 
-    @Override
-    public List<String> getOptions() {
-        List<String> options = new ArrayList<String>();
-        options.add("Change Name");
-        options.add("Deposit");
-        options.add("Withdraw");
-        return options;
-    }
+//    @Override
+//    public List<String> getOptions() {
+//        List<String> options = new ArrayList<String>();
+//        options.add("Change Name");
+//        options.add("Deposit");
+//        options.add("Withdraw");
+//        return options;
+//    }
 
     @Override
     public double getInterestRate() {

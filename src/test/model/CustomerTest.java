@@ -2,6 +2,7 @@ package model;
 
 import model.exception.DuplicateAccounts;
 import model.exception.InvalidOperation;
+import model.exception.NoSuchAccountException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ui.OptionsGenerator;
@@ -64,6 +65,32 @@ class CustomerTest {
         assertNull(a1.getCustomer());
 
         assertFalse(customer.removeAccount(a1));
+    }
+
+    @Test
+    void testGetAccountByName() {
+        Account a1 = new DebitAccount("a1");
+        customer.addAccount(a1);
+
+        try {
+            assertEquals(a1, customer.getAccountByName("a1"));
+        } catch (NoSuchAccountException e) {
+           fail();
+        }
+
+        try {
+            customer.getAccountByName("a4");
+            fail();
+        } catch (NoSuchAccountException e) {
+           //expected
+        }
+
+        try {
+            assertTrue(customer.removeAccount("a1"));
+        } catch (NoSuchAccountException e) {
+            fail();
+        }
+
     }
 
     @Test

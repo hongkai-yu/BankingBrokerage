@@ -29,17 +29,27 @@ class BankTest {
     void testDuplicateCustomer() {
         assertEquals(customer1, customer3);
         assertNotEquals(customer1, customer2);
+        assertNotEquals(null, customer1);
     }
 
     @Test
     void testAddRemoveCustomer() {
         assertTrue(bank.addCustomer(customer1));
         assertEquals(bank,customer1.getBank());
+
         assertFalse(bank.addCustomer(customer3));
 
         assertTrue(bank.removeCustomer(customer1));
+        assertNull(customer1.getBank());
 
+        assertTrue(bank.addCustomer(customer1));
+        assertEquals(bank,customer1.getBank());
+        Bank bank1 = new Bank();
+        customer1.setBank(bank1);
+        assertEquals(bank1,customer1.getBank());
+        assertFalse(bank.getCustomers().contains(customer1));
     }
+
 
     @Test
     void testSignUpLogInCustomer() {

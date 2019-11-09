@@ -52,7 +52,7 @@ public abstract class Account implements Serializable {
         return customer;
     }
 
-    public abstract List<String> getOptions();
+//    public abstract List<String> getOptions();
 
     public abstract String getType();
 
