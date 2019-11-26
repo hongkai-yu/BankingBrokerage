@@ -1,8 +1,9 @@
 package model;
 
-import model.exception.DuplicateAccounts;
+import model.exception.DuplicationException;
 import model.exception.InvalidOperation;
 import model.exception.NoSuchAccountException;
+import model.investment.InvestmentAccount;
 
 import java.io.*;
 import java.util.*;
@@ -11,20 +12,23 @@ import java.util.*;
 public class Customer implements Serializable, Observer {
 
     private String userName;
-    private IdentityChecker identityChecker;
+    private String password;
     private Set<Account> accounts;
     private Bank bank;
 
     // Constructor
     public Customer(String userName, String password) {
         this.userName = userName;
-        identityChecker = new IdentityChecker("password");
-        setPassword(password);
+        this.password = password;
         accounts = new HashSet<>();
     }
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public Set<Account> getAccounts() {
@@ -35,13 +39,21 @@ public class Customer implements Serializable, Observer {
         return bank;
     }
 
+    public Set<String> getAccountsName() {
+        Set<String> result = new HashSet<>();
+        for (Account account : accounts) {
+            result.add(account.getName());
+        }
+        return result;
+    }
+
     //EFFECTS: set the username of the bank account
     public void setUserName(String name) {
         userName = name;
     }
 
     public void setPassword(String password) {
-        identityChecker.setPassword(password);
+        this.password = password;
     }
 
     public void setBank(Bank bank) {
@@ -119,28 +131,31 @@ public class Customer implements Serializable, Observer {
 
     //MODIFIES: this.accounts
     //EFFECTS: add a new unnamed debit account to the accounts
-    public void openAccount(String option, String name) throws InvalidOperation, DuplicateAccounts {
+    public void openAccount(String type, String name) throws DuplicationException {
         Account newAccount;
-        switch (option) {
-            case "1": {
-                newAccount = new DebitAccount(name);
-                break;
-            }
-            case "2": {
+        switch (type) {
+
+            case "Credit": {
                 newAccount = new CreditAccount(name);
                 break;
             }
-            default:
-                throw new InvalidOperation();
+            case "Investment": {
+                newAccount = new InvestmentAccount(name);
+                break;
+            }
+            case "Debit":
+            default: {
+                newAccount = new DebitAccount(name);
+            }
         }
 
         if (!addAccount(newAccount)) {
-            throw new DuplicateAccounts();
+            throw new DuplicationException();
         }
     }
 
     public boolean checkPassword(String input) {
-        return identityChecker.checkPassword(input);
+        return (this.password.equals(input));
     }
 
     // Only compare UserName;

@@ -3,7 +3,7 @@ package model;
 import model.investment.InvestmentAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ui.OptionsGenerator;
+import ui.console.OptionsGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,17 +30,17 @@ class AccountTest {
         assertEquals(c0, c0);
 
         assertEquals(d0, new DebitAccount("d0", 1000));
-        assertEquals(c0, new CreditAccount("d0",200));
+        assertEquals(c0, new CreditAccount("d0", 200));
 
-        assertNotEquals(d0, c0);
+        assertEquals(d0, c0);
 
         Account d10 = new DebitAccount("d1", 200, 0);
-        Account c10 = new CreditAccount("c1",100);
+        Account c10 = new CreditAccount("c1", 100);
 
         assertEquals(d1.hashCode(), d10.hashCode());
         assertEquals(d1, d10);
 
-        assertEquals( c1.hashCode(), c10.hashCode());
+        assertEquals(c1.hashCode(), c10.hashCode());
         assertEquals(c1, c10);
     }
 
@@ -63,7 +63,8 @@ class AccountTest {
     void testAccountInformation() {
         assertEquals("Account Type: Debit\n"
                         + "Account Name: d1\n"
-                        + "Balance: 200.0\n",
+                        + "Balance: 200.0\n"
+                        + "Interest Rate: 0.05\n",
                 d1.accountInformation());
         assertEquals("Account Type: Credit\n"
                         + "Account Name: c1\n"

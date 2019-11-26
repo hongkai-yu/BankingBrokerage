@@ -2,7 +2,7 @@
 //
 //import model.Account;
 //import model.Customer;
-//import model.exception.DuplicateAccounts;
+//import model.exception.DuplicationException;
 //import model.exception.InvalidOperation;
 //
 //import java.io.IOException;
@@ -114,7 +114,7 @@
 //            System.out.println("Name already used. Please try another name.");
 //        }
 //    }
-//
+////
 //    private void removeAccount() {
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Please enter the name of the account that you want to remove: ");

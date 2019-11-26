@@ -19,32 +19,32 @@ public class InvestmentAccount extends TransferableAccount {
         stocksBook = new HashMap<>();
     }
 
-    public void addStock(Stock stock, int n) {
+    public void addStock(Stock stock, int share) {
         if (stocksBook.containsKey(stock)) {
-            stocksBook.put(stock, stocksBook.get(stock) + n);
+            stocksBook.put(stock, stocksBook.get(stock) + share);
         } else {
-            stocksBook.put(stock, n);
+            stocksBook.put(stock, share);
         }
     }
 
-    public boolean buyStock(Stock stock, int n) {
-        if (balance < stock.getCurrentPrice() * n) {
+    public boolean buyStock(Stock stock, int share) {
+        if (balance < stock.getCurrentPrice() * share) {
             return false;
         } else {
-            balance -= stock.getCurrentPrice() * n;
-            addStock(stock, n);
+            balance -= stock.getCurrentPrice() * share;
+            addStock(stock, share);
             return true;
         }
     }
 
-    public boolean buyStock(String stockCode, int n) throws IOException, NoSuchStockOnInternetException {
-        return buyStock(StockBroker.getStock(stockCode), n);
+    public boolean buyStock(String stockCode, int share) throws IOException, NoSuchStockOnInternetException {
+        return buyStock(StockBroker.getStock(stockCode), share);
     }
 
-    public boolean sellStock(Stock stock, int n) {
-        if (stocksBook.containsKey(stock) && stocksBook.get(stock) >= n) {
-            balance += stock.getCurrentPrice() * n;
-            stocksBook.put(stock, stocksBook.get(stock) - n);
+    public boolean sellStock(Stock stock, int share) {
+        if (stocksBook.containsKey(stock) && stocksBook.get(stock) >= share) {
+            balance += stock.getCurrentPrice() * share;
+            stocksBook.put(stock, stocksBook.get(stock) - share);
             if (stocksBook.get(stock) == 0) {
                 stocksBook.remove(stock);
             }
@@ -54,8 +54,8 @@ public class InvestmentAccount extends TransferableAccount {
         }
     }
 
-    public boolean sellStock(String stockCode, int n) throws IOException, NoSuchStockOnInternetException {
-        return sellStock(StockBroker.getStock(stockCode), n);
+    public boolean sellStock(String stockCode, int share) throws IOException, NoSuchStockOnInternetException {
+        return sellStock(StockBroker.getStock(stockCode), share);
     }
 
     public void sellAllStocks() {
@@ -107,8 +107,29 @@ public class InvestmentAccount extends TransferableAccount {
 
     @Override
     public String accountInformation() {
-        //TODO
-        return null;
+        return "Account Type: " + getType() + "\n"
+                + "Account Name: " + getName() + "\n"
+                + "Balance: " + getBalance() + "\n"
+                + "Stock holdings: \n"
+                + "Code Current Price Share: \n"
+                + stockInformation();
+    }
+
+    private String stockInformation() {
+        StringBuilder result = new StringBuilder();
+        for (Stock stock : stocksBook.keySet()) {
+            result.append(stock.getStockCode());
+            result.append(" ");
+            result.append(stock.getCurrentPrice());
+            result.append(" ");
+            result.append(stocksBook.get(stock));
+            result.append("\n");
+        }
+        if (result.toString().equals("")) {
+            return "none";
+        } else {
+            return result.toString();
+        }
     }
 
 }

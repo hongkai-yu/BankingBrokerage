@@ -1,6 +1,7 @@
 package model;
 
-import model.exception.UserNameOrPasswordWrongException;
+import model.exception.DuplicationException;
+import model.exception.UsernameOrPasswordWrongException;
 
 import java.io.*;
 import java.util.HashSet;
@@ -50,17 +51,22 @@ public class Bank extends Observable implements Serializable {
         }
     }
 
-    public boolean signUpCustomer(String userName, String password) {
-        return addCustomer(new Customer(userName, password));
+    public Customer signUpCustomer(String userName, String password) throws DuplicationException {
+        Customer customer = new Customer(userName, password);
+        if (addCustomer(customer)) {
+            return customer;
+        } else {
+            throw new DuplicationException();
+        }
     }
 
-    public Customer logInCustomer(String userName, String password) throws UserNameOrPasswordWrongException {
+    public Customer logInCustomer(String userName, String password) throws UsernameOrPasswordWrongException {
         for (Customer customer : customers) {
             if (customer.getUserName().equals(userName) && customer.checkPassword(password)) {
                 return customer;
             }
         }
-        throw new UserNameOrPasswordWrongException();
+        throw new UsernameOrPasswordWrongException();
     }
 
     public Set<Customer> getCustomers() {
@@ -70,12 +76,13 @@ public class Bank extends Observable implements Serializable {
     public void save(String filePath) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath));
         oos.writeObject(this);
+        oos.close();
     }
 
     public static Bank load(String filePath) throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
-        return (Bank) ois.readObject();
+        Bank bank = (Bank) ois.readObject();
+        ois.close();
+        return bank;
     }
-
-
 }

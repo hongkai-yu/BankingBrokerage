@@ -56,7 +56,8 @@ public class DebitAccount extends TransferableAccount implements UsingInterestRa
     public String accountInformation() {
         return "Account Type: " + getType() + "\n"
                 + "Account Name: " + getName() + "\n"
-                + "Balance: " + getBalance() + "\n";
+                + "Balance: " + getBalance() + "\n"
+                + "Interest Rate: " + getInterestRate() + "\n";
     }
 
     @Override

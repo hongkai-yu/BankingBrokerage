@@ -10,6 +10,8 @@ public abstract class Account implements Serializable {
     protected String name;
     protected Customer customer;
 
+    private List<String> boo;
+
     // Constructors
     public Account(String name) {
         this.name = name;
@@ -28,7 +30,7 @@ public abstract class Account implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null) {
             return false;
         }
         Account account = (Account) o;
@@ -94,4 +96,8 @@ public abstract class Account implements Serializable {
     //EFFECTS: get an overview of the account
     public abstract String accountInformation();
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

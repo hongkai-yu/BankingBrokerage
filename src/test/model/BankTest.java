@@ -1,6 +1,7 @@
 package model;
 
-import model.exception.UserNameOrPasswordWrongException;
+import model.exception.DuplicationException;
+import model.exception.UsernameOrPasswordWrongException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,28 +54,37 @@ class BankTest {
 
     @Test
     void testSignUpLogInCustomer() {
-        assertTrue(bank.signUpCustomer("c","123"));
+        try {
+            bank.signUpCustomer("c","123");
+        } catch (DuplicationException e) {
+            fail();
+        }
         assertTrue(bank.getCustomers().contains(customer1));
 
-        assertFalse(bank.signUpCustomer("c","234"));
+        try {
+            bank.signUpCustomer("c","234");
+            fail();
+        } catch (DuplicationException e) {
+            // expected
+        }
 
         try {
             assertEquals(customer1,bank.logInCustomer("c", "123"));
-        } catch (UserNameOrPasswordWrongException e) {
+        } catch (UsernameOrPasswordWrongException e) {
             fail();
         }
 
         try {
             bank.logInCustomer("c","234");
             fail();
-        } catch (UserNameOrPasswordWrongException e) {
+        } catch (UsernameOrPasswordWrongException e) {
             //expected;
         }
 
         try {
             bank.logInCustomer("b","123");
             fail();
-        } catch (UserNameOrPasswordWrongException e) {
+        } catch (UsernameOrPasswordWrongException e) {
            //expected
         }
     }

@@ -1,9 +1,10 @@
 package model.investment;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Stock {
+public class Stock implements Serializable {
 
     private String stockCode;
     private double currentPrice;
