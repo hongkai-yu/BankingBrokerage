@@ -29,18 +29,13 @@ public class CreditAccount extends Account {
         return "Credit";
     }
 
-    @Override
-    public List<String> getOptions() {
-        List<String> options = new ArrayList<String>();
-        options.add("Change Name");
-        options.add("Make Purchase");
-        return options;
-    }
-
     public double getCreditRemain() {
         return credit - balance;
     }
 
+    //REQUIRES: the amount is not negative
+    //MODIFIES: this
+    //EFFECTS: increase balance by the given amount and return true if has sufficient credit, return false otherwise
     public boolean makePurchase(double amount) {
         if (balance + amount > credit) {
             return false;
@@ -50,8 +45,10 @@ public class CreditAccount extends Account {
         }
     }
 
+    //MODIFIES: payer, this
+    //EFFECTS: require the payer to pay for the bill
     public boolean requestPayment(TransferableAccount payer, double amount) {
-        return payer.transferMoney(this,amount);
+        return payer.transferMoney(this, amount);
     }
 
     //EFFECTS: get an overview of the account
@@ -59,7 +56,8 @@ public class CreditAccount extends Account {
     public String accountInformation() {
         return "Account Type: " + getType() + "\n"
                 + "Account Name: " + getName() + "\n"
-                + "Balance: " + getBalance() + "\n";
+                + "Balance: " + getBalance() + "\n"
+                + "Remaining Credit: " + getCreditRemain();
     }
 
 }

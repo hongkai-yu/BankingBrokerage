@@ -29,15 +29,6 @@ public class DebitAccount extends TransferableAccount implements UsingInterestRa
     }
 
     @Override
-    public List<String> getOptions() {
-        List<String> options = new ArrayList<String>();
-        options.add("Change Name");
-        options.add("Deposit");
-        options.add("Withdraw");
-        return options;
-    }
-
-    @Override
     public double getInterestRate() {
         return interestRate;
     }
@@ -52,6 +43,7 @@ public class DebitAccount extends TransferableAccount implements UsingInterestRa
         interestRate = ir;
     }
 
+    //EFFECTS: give an overview of the account
     @Override
     public String accountInformation() {
         return "Account Type: " + getType() + "\n"
@@ -60,6 +52,9 @@ public class DebitAccount extends TransferableAccount implements UsingInterestRa
                 + "Interest Rate: " + getInterestRate() + "\n";
     }
 
+    //REQUIRES: interest is a number between 0 and 1
+    //MODIFIES: this.balance
+    //EFFECTS: update the balance to the next interest rate period
     @Override
     public void updateNextPeriod() {
         balance *= (1 + interestRate);

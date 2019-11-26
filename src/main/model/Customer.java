@@ -1,7 +1,6 @@
 package model;
 
 import model.exception.DuplicationException;
-import model.exception.InvalidOperation;
 import model.exception.NoSuchAccountException;
 import model.investment.InvestmentAccount;
 
@@ -39,6 +38,7 @@ public class Customer implements Serializable, Observer {
         return bank;
     }
 
+    //EFFECTS: return a set of this's accounts' name
     public Set<String> getAccountsName() {
         Set<String> result = new HashSet<>();
         for (Account account : accounts) {
@@ -47,7 +47,6 @@ public class Customer implements Serializable, Observer {
         return result;
     }
 
-    //EFFECTS: set the username of the bank account
     public void setUserName(String name) {
         userName = name;
     }
@@ -56,6 +55,9 @@ public class Customer implements Serializable, Observer {
         this.password = password;
     }
 
+
+    //MODIFIES: this, bank
+    //EFFECTS: set this.bank as bank, also include this into the bank's set of customers
     public void setBank(Bank bank) {
         if (getBank() == null) {
             this.bank = bank;
@@ -67,10 +69,22 @@ public class Customer implements Serializable, Observer {
         }
     }
 
+    //MODIFIES: this, bank
+    //EFFECTS: remove this.bank, also remove this from the bank's set of customers
+    public void removeBank() {
+        if (!(getBank() == null)) {
+            Bank saveBank = getBank();
+            bank = null;
+            saveBank.removeCustomer(this);
+        }
+    }
+
+    //EFFECTS: return if this contains the given account
     public boolean hasAccount(Account account) {
         return getAccounts().contains(account);
     }
 
+    //EFFECTS: return an account by the given account name, throw an exception if not found
     public Account getAccountByName(String name) throws NoSuchAccountException {
         for (Account account : accounts) {
             if (account.getName().equals(name)) {
@@ -80,18 +94,8 @@ public class Customer implements Serializable, Observer {
         throw new NoSuchAccountException();
     }
 
-    //EFFECTS: add an account to this customer
-    public boolean addAccount(Account account) {
-        if (!accounts.contains(account)) {
-            accounts.add(account);
-            account.setCustomer(this);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    //EFFECTS: remove an account to the bank accounts, based on the account
+    //MODIFIES: this, account
+    //EFFECTS: remove account from account, also remove this as account's customer
     public boolean removeAccount(Account account) {
         if (accounts.contains(account)) {
             accounts.remove(account);
@@ -102,15 +106,21 @@ public class Customer implements Serializable, Observer {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: remove an account by name, throw an exception if not found
     public boolean removeAccount(String accountName) throws NoSuchAccountException {
         return removeAccount(getAccountByName(accountName));
     }
 
-    public void removeBank() {
-        if (!(getBank() == null)) {
-            Bank saveBank = getBank();
-            bank = null;
-            saveBank.removeCustomer(this);
+    //MODIFIES: this, account
+    //EFFECTS: set this.account into accounts, also set this as account's customer
+    public boolean addAccount(Account account) {
+        if (!accounts.contains(account)) {
+            accounts.add(account);
+            account.setCustomer(this);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -119,22 +129,12 @@ public class Customer implements Serializable, Observer {
         return accounts.size();
     }
 
-    public List<String> getOptions() {
-        List<String> options = new ArrayList<>();
-        options.add("Open An Account");
-        options.add("Remove An Account");
-        options.add("Operate An Account");
-        options.add("Save");
-        return options;
-    }
-
-
     //MODIFIES: this.accounts
-    //EFFECTS: add a new unnamed debit account to the accounts
+    //EFFECTS: add an account with given name and type to accounts,
+    //          throw an exception if already has an account with the same name
     public void openAccount(String type, String name) throws DuplicationException {
         Account newAccount;
         switch (type) {
-
             case "Credit": {
                 newAccount = new CreditAccount(name);
                 break;
@@ -148,7 +148,6 @@ public class Customer implements Serializable, Observer {
                 newAccount = new DebitAccount(name);
             }
         }
-
         if (!addAccount(newAccount)) {
             throw new DuplicationException();
         }
@@ -176,6 +175,10 @@ public class Customer implements Serializable, Observer {
         return Objects.hash(userName);
     }
 
+
+    //REQUIRES: the arg is a valid double number
+    //MODIFIES: this.accounts
+    //EFFECTS: set all the interest rate of the accounts as the given interest rate
     @Override
     public void update(Observable o, Object arg) {
         double interestRate = (double) arg;

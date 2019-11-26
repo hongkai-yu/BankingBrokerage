@@ -10,6 +10,7 @@ import java.net.URL;
 
 public class StockBroker {
 
+    //EFFECTS: give the price of the stock of the given stock code
     public static double getStockPrice(String code) throws IOException, NoSuchStockOnInternetException {
 
         URL url = new URL("https://financialmodelingprep.com/api/v3/stock/real-time-price/" + code);
@@ -31,13 +32,9 @@ public class StockBroker {
         }
     }
 
+    //EFFECTS: return a stock with current price given a stock code
     public static Stock getStock(String code) throws IOException, NoSuchStockOnInternetException {
         return new Stock(code, getStockPrice(code));
-    }
-
-    public static void main(String[] args) throws IOException, NoSuchStockOnInternetException {
-        System.out.println(getStockPrice("MSFT"));
-        System.out.println(getStockPrice("QWERTYU"));
     }
 }
 

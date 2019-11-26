@@ -3,7 +3,6 @@ package model;
 import model.investment.InvestmentAccount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ui.console.OptionsGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,9 +44,10 @@ class AccountTest {
     }
 
     @Test
-    void testSetName() {
+    void testToString() {
         d0.setName("RealName");
         assertEquals("RealName", d0.getName());
+        assertEquals("RealName", d0.toString());
     }
 
     @Test
@@ -68,18 +68,22 @@ class AccountTest {
                 d1.accountInformation());
         assertEquals("Account Type: Credit\n"
                         + "Account Name: c1\n"
-                        + "Balance: 0.0\n",
+                        + "Balance: 0.0\n"
+                        + "Remaining Credit: 100.0",
                 c1.accountInformation());
     }
 
     @Test
-    void testGetOptions() {
-        assertEquals("[1] Change Name [2] Deposit [3] Withdraw ",
-                OptionsGenerator.generateOptions(d1.getOptions()));
-        assertEquals("[1] Change Name [2] Make Purchase ",
-                OptionsGenerator.generateOptions(c1.getOptions()));
-        assertEquals("[1] Change Name [2] Buy Stocks [3] Sell Stocks ",
-                OptionsGenerator.generateOptions(i1.getOptions()));
-    }
+    void testSetCustomer() {
+        Customer c1 = new Customer("c1", "123");
+        Customer c2 = new Customer("c2", "123");
 
+        d0.setCustomer(c1);
+        assertEquals(c1, d0.getCustomer());
+        assertTrue(c1.getAccounts().contains(d0));
+
+        d0.setCustomer(c2);
+        assertEquals(c2, d0.getCustomer());
+        assertFalse(c1.getAccounts().contains(d0));
+    }
 }

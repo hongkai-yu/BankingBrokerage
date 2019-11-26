@@ -43,6 +43,8 @@ public class Stock implements Serializable {
         this.currentPrice = currentPrice;
     }
 
+    //MODIFIES: this.currentPrice
+    //EFFECTS: set the price of this stock to the price of the Internet, throw an exception if it is not found
     public void updatePrice() throws IOException, NoSuchStockOnInternetException {
         setCurrentPrice(StockBroker.getStockPrice(stockCode));
     }

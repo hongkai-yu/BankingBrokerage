@@ -26,8 +26,9 @@ public abstract class TransferableAccount extends Account {
         }
     }
 
+    //REQUIRES: the payee is either a transferable account or a credit account
     //MODIFIES: this, account
-    //EFFECTS: transfer money from this to account, true if succeeded, false otherwise.
+    //EFFECTS: transfer money from this to account, return true if succeeded, return false otherwise.
     public boolean transferMoney(Account payee, Double amount) {
         if (amount > balance) {
             return false;

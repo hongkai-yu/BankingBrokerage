@@ -19,6 +19,8 @@ public class WeirdFinancialProduct implements UsingInterestRate {
         interestRate = ir;
     }
 
+    //MODIFIES: this
+    //EFFECT: using a weird formula, calculating the value of the product in the next interest rate period
     @Override
     public void updateNextPeriod() {
         amount = (amount / 2) * (1 + interestRate);

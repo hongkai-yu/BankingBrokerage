@@ -1,9 +1,11 @@
 package model;
 
+import model.exception.DuplicationException;
 import model.exception.NoSuchAccountException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ui.console.OptionsGenerator;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,55 +102,37 @@ class CustomerTest {
     }
 
     @Test
+    void testGetAccountsName() {
+        customer.addAccount(new DebitAccount("DebitAccount"));
+        customer.addAccount(new CreditAccount("CreditAccount"));
+
+        Set<String> result =  customer.getAccountsName();
+        assertTrue(result.contains("DebitAccount"));
+        assertTrue(result.contains("CreditAccount"));
+    }
+
+    @Test
     void testOpenAccount() {
         try {
-            customer.openAccount("1", "A1");
+            customer.openAccount("Credit", "A1");
         } catch (Exception e) {
             fail();
         }
         assertEquals(1, customer.numberOfAccounts());
 
         try {
-            customer.openAccount("2", "A2");
-        } catch (Exception e) {
+            customer.openAccount("Debit", "A1");
+            fail("Should have throw Duplication Exception.");
+        } catch (DuplicationException e) {
+            // expected
+        }
+
+        try {
+            customer.openAccount("Investment", "A2");
+        } catch (DuplicationException e) {
             fail();
         }
         assertEquals(2, customer.numberOfAccounts());
-
-    }
-
-//    @Test
-//    void testOpenAccountExceptions() {
-//        try {
-//            customer.openAccount("1", "A1");
-//        } catch (Exception e) {
-//            fail();
-//        }
-//
-//        try {
-//            customer.openAccount("3", "A1");
-//            fail("Should have throw InvalidOperation.");
-//        } catch (InvalidOperation e) {
-//            // expected
-//        } catch (DuplicationException e) {
-//            fail();
-//        }
-//
-//        try {
-//            customer.openAccount("1", "A1");
-//            fail("Should have throw DuplicateAccounts.");
-//        } catch (InvalidOperation invalidOperation) {
-//            fail();
-//        } catch (DuplicationException duplicationException) {
-//            //expected
-//        }
-//
-//    }
-
-    @Test
-    void testOptionsOfCustomer() {
-        assertEquals("[1] Open An Account [2] Remove An Account [3] Operate An Account [4] Save ",
-                OptionsGenerator.generateOptions(customer.getOptions()));
     }
 }
 

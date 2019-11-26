@@ -30,7 +30,7 @@ public class SettingsForDemo {
         Customer test = new Customer("Test", "123456");
 
         test.addAccount(new CreditAccount("Test-Credit"));
-        test.addAccount(new DebitAccount("Test-Debit"));
+        test.addAccount(new DebitAccount("Test-Debit",1000));
         test.addAccount(new InvestmentAccount("Test-Investment"));
 
         return test;
@@ -40,7 +40,7 @@ public class SettingsForDemo {
     public static Customer constructCustomerHongkai() {
         Customer hongkai = new Customer("hongkaiy", "90316894");
 
-        hongkai.addAccount(new CreditAccount("Hongkai-Credit", 100));
+        hongkai.addAccount(new CreditAccount("Hongkai-Credit", 1000));
         hongkai.addAccount(new DebitAccount("Hongkai-Debit", 1000, 0.1));
 
         InvestmentAccount investmentAccount = new InvestmentAccount("Hongkai-Investment", 5000);

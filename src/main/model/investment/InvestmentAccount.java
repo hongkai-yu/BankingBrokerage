@@ -19,6 +19,8 @@ public class InvestmentAccount extends TransferableAccount {
         stocksBook = new HashMap<>();
     }
 
+    //MODIFIES: this.stocksBook
+    //EFFECTS: add a stock to the stocksBook, if the stock is already held, increase the number of it
     public void addStock(Stock stock, int share) {
         if (stocksBook.containsKey(stock)) {
             stocksBook.put(stock, stocksBook.get(stock) + share);
@@ -27,6 +29,9 @@ public class InvestmentAccount extends TransferableAccount {
         }
     }
 
+    //REQUIRES: the stock's price is a valid non-negative number
+    //MODIFIES: this.stocksBook
+    //EFFECTS: decrease balance, add stock, and return true if has sufficient fund; return false otherwise
     public boolean buyStock(Stock stock, int share) {
         if (balance < stock.getCurrentPrice() * share) {
             return false;
@@ -37,10 +42,14 @@ public class InvestmentAccount extends TransferableAccount {
         }
     }
 
+    //MODIFIES: this.stocksBook2yy
+    //EFFECTS: buy a stock using stock code, using Internet, throw an exception if no such stock on the Internet
     public boolean buyStock(String stockCode, int share) throws IOException, NoSuchStockOnInternetException {
         return buyStock(StockBroker.getStock(stockCode), share);
     }
 
+    //MODIFIES: this.stocksBook
+    //EFFECTS: sell a stock at its current price and return true if has sufficient fund, return false otherwise
     public boolean sellStock(Stock stock, int share) {
         if (stocksBook.containsKey(stock) && stocksBook.get(stock) >= share) {
             balance += stock.getCurrentPrice() * share;
@@ -54,10 +63,14 @@ public class InvestmentAccount extends TransferableAccount {
         }
     }
 
+    //MODIFIES: this.stocksBook
+    //EFFECTS: sell a stock using stock code, using Internet, throw an exception if no such stock on the Internet
     public boolean sellStock(String stockCode, int share) throws IOException, NoSuchStockOnInternetException {
         return sellStock(StockBroker.getStock(stockCode), share);
     }
 
+    //MODIFIES: this.stocksBook
+    //EFFECTS: sell all the stocks at their current prices
     public void sellAllStocks() {
         Set<Stock> stocks = new HashSet<>(stocksBook.keySet());
         for (Stock stock : stocks) {
@@ -65,6 +78,9 @@ public class InvestmentAccount extends TransferableAccount {
         }
     }
 
+    //REQUIRES: all stocks on the stocksBook are valid stocks
+    //MODIFIES: this
+    //EFFECTS: update all the price of the stocks using the Internet, throw an exception if stock code not found
     public void updateStocksPrice() throws IOException, NoSuchStockOnInternetException {
         for (Stock stock : stocksBook.keySet()) {
             stock.updatePrice();
@@ -79,6 +95,8 @@ public class InvestmentAccount extends TransferableAccount {
         return getStocksBook().size();
     }
 
+    //REQUIRES: all stocks on the stocksBook are valid stocks
+    //EFFECTS: get the current value of all the stocks
     public double getStocksValue() {
         double value = 0;
         for (Stock stock : stocksBook.keySet()) {
@@ -87,17 +105,9 @@ public class InvestmentAccount extends TransferableAccount {
         return value;
     }
 
+    //EFFECTS: get the sum of the stock value and balance of the account
     public double getAccountValue() {
         return getStocksValue() + getBalance();
-    }
-
-    @Override
-    public List<String> getOptions() {
-        List<String> options = new ArrayList<>();
-        options.add("Change Name");
-        options.add("Buy Stocks");
-        options.add("Sell Stocks");
-        return options;
     }
 
     @Override
@@ -105,14 +115,16 @@ public class InvestmentAccount extends TransferableAccount {
         return "Investment";
     }
 
+    //EFFECTS: get an overview of the account
     @Override
     public String accountInformation() {
         return "Account Type: " + getType() + "\n"
                 + "Account Name: " + getName() + "\n"
                 + "Balance: " + getBalance() + "\n"
                 + "Stock holdings: \n"
-                + "Code Current Price Share: \n"
-                + stockInformation();
+                + "Code Current Price Share\n"
+                + stockInformation()
+                + "Total account value: " + getAccountValue();
     }
 
     private String stockInformation() {
@@ -126,7 +138,7 @@ public class InvestmentAccount extends TransferableAccount {
             result.append("\n");
         }
         if (result.toString().equals("")) {
-            return "none";
+            return "none\n";
         } else {
             return result.toString();
         }

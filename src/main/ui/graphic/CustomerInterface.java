@@ -1,11 +1,9 @@
 package ui.graphic;
 
-import model.Account;
-import model.Bank;
-import model.Customer;
-import model.DebitAccount;
+import model.*;
 import model.exception.DuplicationException;
 import model.exception.NegativeAmountException;
+import model.exception.NoSuchAccountException;
 import model.investment.InvestmentAccount;
 import model.investment.NoSuchStockOnInternetException;
 
@@ -46,6 +44,7 @@ public class CustomerInterface extends JFrame {
     }
 
 
+    //EFFECTS: initialize the size, dimension, exit pattern ,layout
     private void initializeWindow() {
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -53,6 +52,7 @@ public class CustomerInterface extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    //EFFECTS: initialize the layout, account list and control panel of the account panel
     private void initializeAccountPanel() {
         accountPanel = new JPanel(new BorderLayout());
         add(accountPanel, BorderLayout.WEST);
@@ -63,6 +63,7 @@ public class CustomerInterface extends JFrame {
         initializeCustomerButtons();
     }
 
+    //EFFECTS: initialize the buttons for customer use
     private void initializeCustomerButtons() {
         JPanel customerButtons = new JPanel(new GridLayout(4, 1, 1, 1));
 
@@ -124,6 +125,7 @@ public class CustomerInterface extends JFrame {
         }
     }
 
+    //EFFECTS: reload all the account names of the customer to the account list
     private void refreshAccountList() {
         DefaultListModel<Account> model = new DefaultListModel<>();
         for (Account account : customer.getAccounts()) {
@@ -165,7 +167,7 @@ public class CustomerInterface extends JFrame {
     }
 
     private void findDebitButtons() {
-        JPanel accountButtons = new JPanel(new GridLayout(4, 1, 1, 1));
+        JPanel accountButtons = new JPanel(new GridLayout(5, 1, 1, 1));
         controlPanel.add(accountButtons, BorderLayout.CENTER);
 
         JButton changeName = new JButton("Change account name");
@@ -179,6 +181,10 @@ public class CustomerInterface extends JFrame {
         JButton withdraw = new JButton("Withdraw");
         withdraw.addActionListener(new WithdrawListener());
         accountButtons.add(withdraw);
+
+        JButton transferMoney = new JButton("Transfer money");
+        transferMoney.addActionListener(new TransferMoneyListener());
+        accountButtons.add(transferMoney);
 
         JButton nextPeriod = new JButton("Next period");
         nextPeriod.addActionListener(new NextPeriodListener());
@@ -237,6 +243,28 @@ public class CustomerInterface extends JFrame {
         }
     }
 
+    private class TransferMoneyListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                List<String> data = InputPanels.transferMoneyPanel(customer.getAccountsName());
+                if (InputValidChecker.inputNotNullChecker(data.get(1))) {
+                    Account payee = customer.getAccountByName(data.get(0));
+                    double amount = Double.parseDouble(data.get(1));
+                    DebitAccount debitAccount = (DebitAccount) activeAccount;
+                    if (debitAccount.transferMoney(payee, amount)) {
+                        JOptionPane.showMessageDialog(null, "Transferred successfully");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Insufficient fund");
+                    }
+                }
+            } catch (CancelException | NoSuchAccountException ex) {
+                // Do nothing // impossible
+            }
+            CustomerInterface.this.refreshDisplay();
+        }
+    }
+
     private class NextPeriodListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -265,8 +293,12 @@ public class CustomerInterface extends JFrame {
             String input = JOptionPane.showInputDialog("Please enter the total amount of the bill:");
             if (InputValidChecker.inputNotNullChecker(input)) {
                 double bill = Double.parseDouble(input);
-                activeAccount.addBalance(bill);
-                JOptionPane.showMessageDialog(null, "Purchased successfully");
+                CreditAccount creditAccount = (CreditAccount) activeAccount;
+                if (creditAccount.makePurchase(bill)) {
+                    JOptionPane.showMessageDialog(null, "Purchased successfully");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Insufficient credit");
+                }
             }
             CustomerInterface.this.refreshDisplay();
         }
@@ -336,7 +368,6 @@ public class CustomerInterface extends JFrame {
             CustomerInterface.this.refreshDisplay();
         }
     }
-
 
     private class SellStockListener implements ActionListener {
         @Override

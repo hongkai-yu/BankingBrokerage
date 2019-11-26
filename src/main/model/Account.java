@@ -54,8 +54,6 @@ public abstract class Account implements Serializable {
         return customer;
     }
 
-    public abstract List<String> getOptions();
-
     public abstract String getType();
 
     public void setName(String name) {
@@ -66,6 +64,8 @@ public abstract class Account implements Serializable {
         this.balance = balance;
     }
 
+    //MODIFIES: this, customer
+    //EFFECTS: set this.customer as customer, also include this into the customer's list of accounts
     public void setCustomer(Customer customer) {
         if (getCustomer() == null) {
             this.customer = customer;
@@ -77,6 +77,8 @@ public abstract class Account implements Serializable {
         }
     }
 
+    //MODIFIES: this, customer
+    //EFFECTS: remove this.customer, also remove this from the customer's list of accounts
     public void removeCustomer() {
         if (!(getCustomer() == null)) {
             Customer saveCustomer = getCustomer();
@@ -85,10 +87,14 @@ public abstract class Account implements Serializable {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: add balance
     public void addBalance(double add) {
         this.balance += add;
     }
 
+    //MODIFIES: this
+    //EFFECTS: sub balance
     public void subBalance(double sub) {
         this.balance -= sub;
     }
@@ -96,6 +102,7 @@ public abstract class Account implements Serializable {
     //EFFECTS: get an overview of the account
     public abstract String accountInformation();
 
+    //EFFECTS: just the name of the account, used for the JList GUI
     @Override
     public String toString() {
         return getName();
